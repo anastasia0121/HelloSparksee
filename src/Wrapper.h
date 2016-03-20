@@ -14,6 +14,7 @@
 #include "io/NodeTypeExporter.h"
 
 #include "MyExport.h"
+#include "Type.h"
 
 using namespace sparksee::gdb;
 using namespace sparksee::io;
@@ -21,6 +22,8 @@ using namespace sparksee::io;
 class DataManager
 {
     public:
+        void create_objects(GraphObjects &go);
+
         //add to database
         oid_t add_node(int16_t type, void *info);
       

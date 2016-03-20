@@ -17,6 +17,29 @@
 using namespace sparksee::gdb;
 using namespace sparksee::io;
 
+void DataManager::create_objects(GraphObjects &go)
+{
+    // Add a node type for the movies , with a unique identifier and two indexed
+    // attributes
+    go.movie.types.type = g->NewNodeType(L"MOVIE");
+    go.movie.types.id = g->NewAttribute(go.movie.types.type, L"ID", Long, Unique);
+    go.movie.types.title = g->NewAttribute(go.movie.types.type, L"TITLE", String, Indexed);
+    go.movie.types.year = g->NewAttribute(go.movie.types.type, L"YEAR", Integer , Indexed);
+    // Add a node type for the people , with a unique identifier and an indexed
+    // attribute
+    go.people.types.type = g->NewNodeType(L"PEOPLE");
+    go.people.types.id = g->NewAttribute(go.people.types.type , L"ID", Long, Unique);
+    go.people.types.name = g->NewAttribute(go.people.types.type , L"NAME", String, Indexed);
+
+    // Add an undirected edge type with an attribute for the cast of a movie
+    go.cast.types.type = g->NewEdgeType(L"CAST", false , false);
+    go.cast.types.character = g->NewAttribute(go.cast.types.type, L"CHARACTER", String, Basic);
+    // Add a directed edge type restricted to go from people to 
+    // movie for the director of a movie
+    go.directs.types.type = g->NewRestrictedEdgeType(L"DIRECTS", 
+            go.people.types.type, go.movie.types.type, false);
+}
+
 oid_t DataManager::add_node(int16_t type, void *info)
 {
     static Value *value = new Value();

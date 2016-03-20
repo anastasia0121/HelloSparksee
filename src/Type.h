@@ -77,4 +77,12 @@ enum {
     DIRECTS
 };
 
+struct GraphObjects
+{
+    struct Movie movie;
+    struct People people;
+    struct Cast cast;
+    struct Directs directs;
+};
+
 #endif // __IFMO_DISTRIBUTED_CLASS_TYPES__H
