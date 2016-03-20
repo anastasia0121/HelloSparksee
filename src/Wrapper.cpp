@@ -46,25 +46,49 @@ const DataManager * DataManager::get_instanse()
 
 void DataManager::create_objects(GraphObjects &go) const
 {
-    // Add a node type for the movies , with a unique identifier and two indexed
-    // attributes
-    go.movie.types.type = g->NewNodeType(L"MOVIE");
-    go.movie.types.id = g->NewAttribute(go.movie.types.type, L"ID", Long, Unique);
-    go.movie.types.title = g->NewAttribute(go.movie.types.type, L"TITLE", String, Indexed);
-    go.movie.types.year = g->NewAttribute(go.movie.types.type, L"YEAR", Integer , Indexed);
-    // Add a node type for the people , with a unique identifier and an indexed
-    // attribute
-    go.people.types.type = g->NewNodeType(L"PEOPLE");
-    go.people.types.id = g->NewAttribute(go.people.types.type , L"ID", Long, Unique);
-    go.people.types.name = g->NewAttribute(go.people.types.type , L"NAME", String, Indexed);
+    //Gnome
+    go.gnome.types.type  = g->NewNodeType(L"Gnome");
+    go.gnome.types.id    = g->NewAttribute(go.gnome.types.type, L"Id",        Long,    Unique);
+    go.gnome.types.name  = g->NewAttribute(go.gnome.types.type, L"Name",      String,  Indexed);
+    go.gnome.types.age   = g->NewAttribute(go.gnome.types.type, L"Age",       Integer, Indexed);
+    go.gnome.types.str   = g->NewAttribute(go.gnome.types.type, L"Strenght",  Integer, Indexed);
+    go.gnome.types.intel = g->NewAttribute(go.gnome.types.type, L"Intellect", Integer, Indexed);
+    go.gnome.types.cha   = g->NewAttribute(go.gnome.types.type, L"Character", Integer, Indexed);
+    go.gnome.types.skill = g->NewAttribute(go.gnome.types.type, L"Skills",    String,  Indexed);
 
-    // Add an undirected edge type with an attribute for the cast of a movie
-    go.cast.types.type = g->NewEdgeType(L"CAST", false , false);
-    go.cast.types.character = g->NewAttribute(go.cast.types.type, L"CHARACTER", String, Basic);
-    // Add a directed edge type restricted to go from people to 
-    // movie for the director of a movie
+    //Mine
+    go.mine.types.type = g->NewNodeType(L"Mine");
+    go.mine.types.id   = g->NewAttribute(go.mine.types.type , L"Id",   Long,   Unique);
+    go.mine.types.name = g->NewAttribute(go.mine.types.type , L"Name", String, Indexed);
+    
+    //Dragon
+    go.dragon.types.type  = g->NewNodeType(L"Dragon");
+    go.dragon.types.id    = g->NewAttribute(go.dragon.types.type, L"Id",        Long,    Unique);
+    go.dragon.types.name  = g->NewAttribute(go.dragon.types.type, L"Name",      String,  Indexed);
+    go.dragon.types.color = g->NewAttribute(go.dragon.types.type, L"Color",     Integer, Indexed);
+    go.dragon.types.cost  = g->NewAttribute(go.dragon.types.type, L"Cost",      Integer, Indexed);
+    go.dragon.types.size  = g->NewAttribute(go.dragon.types.type, L"Size",      Integer, Indexed);
+    go.dragon.types.age   = g->NewAttribute(go.dragon.types.type, L"Age",       Integer, Indexed);
+    go.dragon.types.str   = g->NewAttribute(go.dragon.types.type, L"Strenght",  Integer, Indexed);
+    go.dragon.types.cha   = g->NewAttribute(go.dragon.types.type, L"Character", Integer, Indexed);
+    go.dragon.types.skill = g->NewAttribute(go.dragon.types.type, L"Skills",    String,  Indexed);
+
+    //Ore
+    go.ore.types.type = g->NewNodeType(L"Ore");
+    go.ore.types.id   = g->NewAttribute(go.ore.types.type , L"Id",   Long,   Unique);
+    go.ore.types.name = g->NewAttribute(go.ore.types.type , L"Name", String, Indexed);
+
+    //Bellong 
+    go.belong.types.type = g->NewEdgeType(L"Belong", false , false); //not ore TODO
+    go.belong.types.prof = g->NewAttribute(go.belong.types.type, L"Pofession", String, Basic);
+
+    //Directs
     go.directs.types.type = g->NewRestrictedEdgeType(L"DIRECTS", 
-            go.people.types.type, go.movie.types.type, false);
+            go.gnome.types.type, go.mine.types.type, false);
+
+    //Mines
+    go.mines.types.type = g->NewRestrictedEdgeType(L"MINES", 
+            go.ore.types.type, go.mine.types.type, false);
 }
 
 oid_t DataManager::add_node(int16_t type, void *info) const
@@ -75,23 +99,71 @@ oid_t DataManager::add_node(int16_t type, void *info) const
     {
         switch(type)
         {
-            case MOVIE: 
+            case GNOME: 
                 {  
-                    Movie *tmp = static_cast<Movie*>(info);
+                    Gnome *tmp = static_cast<Gnome*>(info);
                     oid_t new_node = g->NewNode(tmp->types.type);
+
                     g->SetAttribute(new_node, tmp->types.id, 
                             value->SetLong(tmp->values.id));
-                    g->SetAttribute(new_node, tmp->types.title, 
-                            value->SetString(tmp->values.title));
-                    g->SetAttribute(new_node, tmp->types.year,
-                            value->SetInteger(tmp->values.year));
+                    g->SetAttribute(new_node, tmp->types.name, 
+                            value->SetString(tmp->values.name));
+                    g->SetAttribute(new_node, tmp->types.age,
+                            value->SetInteger(tmp->values.age));
+                    g->SetAttribute(new_node, tmp->types.str,
+                            value->SetInteger(tmp->values.str));
+                    g->SetAttribute(new_node, tmp->types.intel,
+                            value->SetInteger(tmp->values.intel));
+                    g->SetAttribute(new_node, tmp->types.cha,
+                            value->SetInteger(tmp->values.cha));
+                    g->SetAttribute(new_node, tmp->types.skill, 
+                            value->SetString(tmp->values.skill));
 
                     return new_node; 
                 }
-            case PEOPLE:
+            case MINE:
                 {
-                    People *tmp = static_cast<People*>(info);
+                    Mine *tmp = static_cast<Mine*>(info);
                     oid_t new_node = g->NewNode(tmp->types.type);
+
+                    g->SetAttribute(new_node, tmp->types.id, 
+                            value->SetLong(tmp->values.id));
+                    g->SetAttribute(new_node, tmp->types.name, 
+                            value->SetString(tmp->values.name));
+
+                    return new_node; 
+                }
+            case DRAGON: 
+                {  
+                    Dragon *tmp = static_cast<Dragon*>(info);
+                    oid_t new_node = g->NewNode(tmp->types.type);
+
+                    g->SetAttribute(new_node, tmp->types.id, 
+                            value->SetLong(tmp->values.id));
+                    g->SetAttribute(new_node, tmp->types.name, 
+                            value->SetString(tmp->values.name));
+                    g->SetAttribute(new_node, tmp->types.age,
+                            value->SetInteger(tmp->values.age));
+                    g->SetAttribute(new_node, tmp->types.color,
+                            value->SetInteger(tmp->values.color));
+                    g->SetAttribute(new_node, tmp->types.cost,
+                            value->SetInteger(tmp->values.cost));
+                    g->SetAttribute(new_node, tmp->types.size,
+                            value->SetInteger(tmp->values.size));
+                    g->SetAttribute(new_node, tmp->types.str,
+                            value->SetInteger(tmp->values.str));
+                    g->SetAttribute(new_node, tmp->types.cha,
+                            value->SetInteger(tmp->values.cha));
+                    g->SetAttribute(new_node, tmp->types.skill, 
+                            value->SetString(tmp->values.skill));
+
+                    return new_node; 
+                }
+            case ORE:
+                {
+                    Ore *tmp = static_cast<Ore*>(info);
+                    oid_t new_node = g->NewNode(tmp->types.type);
+
                     g->SetAttribute(new_node, tmp->types.id, 
                             value->SetLong(tmp->values.id));
                     g->SetAttribute(new_node, tmp->types.name, 
@@ -111,18 +183,25 @@ oid_t DataManager::add_edge(int16_t type, void *info, oid_t left, oid_t right) c
     {
         switch(type)
         {
-            case CAST: 
+            case BELONG: 
                 {  
-                    Cast *tmp = static_cast<Cast*>(info);
+                    Belong *tmp = static_cast<Belong*>(info);
                     oid_t new_edge = g->NewEdge(tmp->types.type, left, right);
-                    g->SetAttribute(new_edge, tmp->types.character, 
-                            value->SetString(tmp->values.character));
+                    g->SetAttribute(new_edge, tmp->types.prof, 
+                            value->SetString(tmp->values.prof));
 
                     return new_edge; 
                 }
             case DIRECTS:
                 {
                     Directs *tmp = static_cast<Directs*>(info);
+                    oid_t new_edge = g->NewEdge(tmp->types.type, left, right);
+
+                    return new_edge; 
+                }
+            case MINES: 
+                {  
+                    Mines *tmp = static_cast<Mines*>(info);
                     oid_t new_edge = g->NewEdge(tmp->types.type, left, right);
 
                     return new_edge; 

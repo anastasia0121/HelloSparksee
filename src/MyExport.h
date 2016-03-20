@@ -20,18 +20,34 @@ using namespace sparksee::io;
 class MyExport : public ExportManager {
    private:
       Graph * g;
-      type_t peopleTypeId;
-      attr_t nameAttrId;
-      type_t moviesTypeId;
-      attr_t titleAttrId;
-      type_t castTypeId;
-      type_t directsTypeId;
+
+      type_t type_gnome;
+      attr_t gnome_name;
+
+      type_t type_mine;
+      attr_t mine_name;
+
+      type_t type_ore;
+      attr_t ore_name;
+
+      type_t type_dragon;
+      attr_t dragon_name;
+
+      type_t type_belong;
+      type_t type_directs;
+      type_t type_mines;
+
       Value v;
    public:
       MyExport()
-         : g(NULL), peopleTypeId(Type::InvalidType), nameAttrId(Attribute::InvalidAttribute), 
-         moviesTypeId(Type::InvalidType), titleAttrId(Attribute::InvalidAttribute), 
-         castTypeId(Type::InvalidType), directsTypeId(Type::InvalidType) {};
+         : g(NULL), 
+         type_gnome(Type::InvalidType), gnome_name(Attribute::InvalidAttribute), 
+         type_mine(Type::InvalidType), mine_name(Attribute::InvalidAttribute), 
+         type_ore(Type::InvalidType), ore_name(Attribute::InvalidAttribute), 
+         type_dragon(Type::InvalidType), dragon_name(Attribute::InvalidAttribute), 
+         type_belong(Type::InvalidType), 
+         type_directs(Type::InvalidType),
+         type_mines(Type::InvalidType) {};
 
       virtual void Prepare(Graph * graph);
 

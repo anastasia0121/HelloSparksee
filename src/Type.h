@@ -14,25 +14,64 @@
 
 #include "MyExport.h"
 
-struct Movie
+struct Gnome
 {
     struct types
     {
         type_t type;
         attr_t id;
-        attr_t title;
-        attr_t year;
+        attr_t name;
+        attr_t age;
+        attr_t str;
+        attr_t intel;
+        attr_t cha;
+        attr_t skill;
     } types;
 
     struct values
     {
         long id;
-        std::wstring title;
-        int year;
+        std::wstring name;
+        int age;
+        int str;
+        int intel;
+        int cha;
+        std::wstring skill;
     } values;
 };
 
-struct People
+struct Dragon
+{
+    struct types
+    {
+        type_t type;
+        attr_t id;
+        attr_t name;
+        attr_t color;
+        attr_t cost;
+        attr_t size;
+        attr_t age;
+        attr_t str;
+        attr_t cha;
+        attr_t skill;
+    } types;
+
+    struct values
+    {
+        long id;
+        std::wstring name;
+        long color;
+        int cost;
+        int size;
+        int age;
+        int str;
+        int intel;
+        int cha;
+        std::wstring skill;
+    } values;
+};
+
+struct Mine
 {
     struct types
     {
@@ -48,17 +87,33 @@ struct People
     }values;
 };
 
-struct Cast
+struct Ore
 {
     struct types
     {
         type_t type;
-        attr_t character;
+        attr_t id;
+        attr_t name;
     } types;
 
     struct values
     {
-        std::wstring character;
+        long id;
+        std::wstring name;
+    }values;
+};
+
+struct Belong
+{
+    struct types
+    {
+        type_t type;
+        attr_t prof;
+    } types;
+
+    struct values
+    {
+        std::wstring prof;
     }values;
 };
 
@@ -70,19 +125,33 @@ struct Directs
     } types;
 };
 
+struct Mines
+{
+    struct types
+    {
+        type_t type;
+    } types;
+};
+
 enum {
-    MOVIE,
-    PEOPLE,
-    CAST,
-    DIRECTS
+    GNOME,
+    MINE,
+    DRAGON,
+    ORE,
+    DIRECTS,
+    BELONG,
+    MINES
 };
 
 struct GraphObjects
 {
-    struct Movie movie;
-    struct People people;
-    struct Cast cast;
+    struct Gnome gnome;
+    struct Mine mine;
+    struct Dragon dragon;
+    struct Ore ore;
+    struct Belong belong;
     struct Directs directs;
+    struct Mines mines;
 };
 
 #endif // __IFMO_DISTRIBUTED_CLASS_TYPES__H

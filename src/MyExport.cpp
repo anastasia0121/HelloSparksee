@@ -18,12 +18,21 @@ using namespace sparksee::io;
 void MyExport::Prepare(Graph * graph) {
     try {
         g = graph;
-        peopleTypeId = g->FindType(L"PEOPLE");
-        nameAttrId = g->FindAttribute(peopleTypeId , L"NAME");
-        moviesTypeId = g->FindType(L"MOVIE");
-        titleAttrId = g->FindAttribute(moviesTypeId , L"TITLE");
-        castTypeId = g->FindType(L"CAST");
-        directsTypeId = g->FindType(L"DIRECTS");
+        type_gnome = g->FindType(L"Gnome");
+        gnome_name = g->FindAttribute(type_gnome, L"Name");
+
+        type_mine = g->FindType(L"Mine");
+        mine_name = g->FindAttribute(type_mine, L"Name");
+
+        type_ore = g->FindType(L"Ore");
+        ore_name = g->FindAttribute(type_ore, L"Name");
+
+        type_dragon = g->FindType(L"Dragon");
+        dragon_name = g->FindAttribute(type_dragon, L"Name");
+
+        type_belong = g->FindType(L"Belong");
+        type_directs = g->FindType(L"Directs");
+        type_mines = g->FindType(L"Mines");
     }
     catch (sparksee::gdb::Error& e) {
         std::cerr << e.Message() << std::endl;
@@ -35,7 +44,7 @@ void MyExport::Release() {
 
 bool_t MyExport::GetGraph(GraphExport& ge) {
     try {
-        ge.SetLabel(L"Hollywood");
+        ge.SetLabel(L"Funny gnomes");
     }
     catch (sparksee::gdb::Error& e) {
         std::cerr << e.Message() << std::endl;
@@ -47,16 +56,19 @@ bool_t MyExport::GetNodeType(type_t nodetype , NodeExport& ne) {
     // default node type export:
     // - PEOPLE in RED nodes
     // - MOVIES in ORANGE nodes
-    try {
-        if (nodetype == peopleTypeId) {
+    try 
+    {
+        if (nodetype == type_mine) 
+        {
             ne.SetColorRGB(16711680); // red
-        } else if (nodetype == moviesTypeId) {
+        } 
+        else
+        {
             ne.SetColorRGB(16744192); // ORANGE
-        } else {
-            assert(false);
-        }
+        } 
     }
-    catch (sparksee::gdb::Error& e) {
+    catch (sparksee::gdb::Error& e) 
+    {
         std::cerr << e.Message() << std::endl;
     }
     return true;
@@ -66,16 +78,19 @@ bool_t MyExport::GetEdgeType(type_t edgetype , EdgeExport& ee) {
     // default edge type export:
     // - CAST in YELLOW lines
     // - DIRECTS in BLUE lines
-    try {
-        if (edgetype == castTypeId) {
+    try 
+    {
+        if (edgetype == type_directs) 
+        {
             ee.SetColorRGB(16776960); // yellow
-        } else if (edgetype == directsTypeId) {
+        } 
+        else
+        {
             ee.SetColorRGB(255); // blue
-        } else {
-            assert(false);
-        }
+        } 
     }
-    catch (sparksee::gdb::Error& e) {
+    catch (sparksee::gdb::Error& e) 
+    {
         std::cerr << e.Message() << std::endl;
     }
     return true;
@@ -87,11 +102,24 @@ bool_t MyExport::GetNode(oid_t nodeOID , NodeExport& ne) {
     // - MOVIES: use the Title attribute as label
     try {
         int nodetype = g->GetObjectType(nodeOID);
-        if (nodetype == peopleTypeId) {
-            g->GetAttribute(nodeOID , nameAttrId , v);
-        } else if (nodetype == moviesTypeId) {
-            g->GetAttribute(nodeOID , titleAttrId , v);
-        } else {
+        if (nodetype == type_gnome) 
+        {
+            g->GetAttribute(nodeOID, gnome_name, v);
+        } 
+        else if (nodetype == type_mine) 
+        {
+            g->GetAttribute(nodeOID, mine_name, v);
+        } 
+        else if (nodetype == type_dragon) 
+        {
+            g->GetAttribute(nodeOID, dragon_name, v);
+        } 
+        else if (nodetype == type_ore) 
+        {
+            g->GetAttribute(nodeOID, ore_name, v);
+        } 
+        else 
+        {
             assert(false);
         }
         std::wstring aux2;

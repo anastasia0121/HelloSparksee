@@ -26,80 +26,67 @@ int main(int argc, char *argv[])
         GraphObjects go;
 
         dtm->create_objects(go);
+/*
+        //Gnome
+        go.gnome.values.id = 1;
+        go.gnome.values.name = L"Untilopulus0";
+        go.gnome.values.age = 2003;
+        go.gnome.values.str = 2003;
+        go.gnome.values.intel = 2003;
+        go.gnome.values.cha = 2003;
+        go.gnome.values.skill = L"Brilliant";
+        oid_t gnome0 = dtm->add_node(GNOME, (void*)(&go.gnome));
 
+        go.gnome.values.id = 2;
+        go.gnome.values.name = L"Untilopulus1";
+        oid_t gnome1 = dtm->add_node(GNOME, (void*)(&go.gnome));
+
+        go.gnome.values.id = 3;
+        go.gnome.values.name = L"Untilopulus2";
+        oid_t gnome2 = dtm->add_node(GNOME, (void*)(&go.gnome));
+
+        //Mine
+        go.mine.values.id = 1;
+        go.mine.values.name = L"Arhopolis";
+        oid_t mine0 = dtm->add_node(MINE, (void*)(&go.mine)); 
+*/
+        //Dragon
+        go.dragon.values.id = 1;
+        go.dragon.values.name = L"Kondragon0";
+        go.dragon.values.age = 2003;
+        go.dragon.values.color = 2003;
+        go.dragon.values.size = 2003;
+        go.dragon.values.cost = 2003;
+        go.dragon.values.str = 2003;
+        go.dragon.values.cha = 2003;
+        go.dragon.values.skill = L"Brilliant";
+        oid_t dragon0 = dtm->add_node(DRAGON, (void*)(&go.dragon));
+
+        //Ore
+        go.ore.values.id = 1;
+        go.ore.values.name = L"Gira0";
+        oid_t ore0 = dtm->add_node(ORE, (void*)(&go.ore)); 
+/*
+        go.ore.values.id = 2;
+        go.ore.values.name = L"Gira1";
+        oid_t ore1 = dtm->add_node(ORE, (void*)(&go.ore)); 
+
+        //Belong
+        go.belong.values.prof = L"Miner";
+        dtm->add_edge(BELONG, (void*)(&go.belong), gnome0, mine0);
+
+        dtm->add_edge(BELONG, (void*)(&go.belong), gnome1, mine0);
+
+        go.belong.values.prof = L"Ruler";
+        dtm->add_edge(BELONG, (void*)(&go.belong), gnome2, mine0);
+
+        //Directs
+        dtm->add_edge(DIRECTS, (void*)(&go.directs), gnome2, mine0);
+
+        //Mines
+        dtm->add_edge(MINES, (void*)(&go.mines), ore0, mine0);
+        dtm->add_edge(MINES, (void*)(&go.mines), ore1, mine0);
         // =================================================================
-        // ADDING NODES
-        // Add some MOVIE nodes
-
-        go.movie.values.id = 1;
-        go.movie.values.title = L"Lost in Translation";
-        go.movie.values.year = 2003;
-        oid_t mLostInTranslation = dtm->add_node(MOVIE, (void*)(&go.movie));
-
-        go.movie.values.id = 2;
-        go.movie.values.title =L"Vicky Cristina Barcelona";
-        go.movie.values.year = 2008;
-        oid_t mVickyCB = dtm->add_node(MOVIE, (void*)(&go.movie));
-
-        go.movie.values.id = 3;
-        go.movie.values.title = L"Manhattan";
-        go.movie.values.year = 1979;
-        oid_t mManhattan = dtm->add_node(MOVIE, (void*)(&go.movie));
-
-       // Add some PEOPLE nodes
-        go.people.values.id = 1;
-        go.people.values.name = L"Scarlett Johansson";
-        oid_t pScarlett = dtm->add_node(PEOPLE, (void*)(&go.people)); 
-        
-        go.people.values.id = 2;
-        go.people.values.name = L"Bill Murray";
-        oid_t pBill = dtm->add_node(PEOPLE, (void*)(&go.people)); 
-
-        go.people.values.id = 3;
-        go.people.values.name = L"Sofia Coppola";
-        oid_t pSofia = dtm->add_node(PEOPLE, (void*)(&go.people)); 
-
-        go.people.values.id = 4;
-        go.people.values.name = L"Woody Allen";
-        oid_t pWoody = dtm->add_node(PEOPLE, (void*)(&go.people)); 
-
-        go.people.values.id = 5;
-        go.people.values.name = L"Penélope Cruz";
-        oid_t pPenelope = dtm->add_node(PEOPLE, (void*)(&go.people)); 
-
-        go.people.values.id = 6;
-        go.people.values.name = L"Diane Keaton";
-        oid_t pDiane = dtm->add_node(PEOPLE, (void*)(&go.people)); 
-        // =============================================================
-
-        // =================================================================
-        // ADDING EDGES
-        // Add some CAST edges
-        // Remember that we are reusing the Value class instance to set the attributes
-        go.cast.values.character = L"Charlotte";
-        dtm->add_edge(CAST, (void*)(&go.cast), mLostInTranslation, pScarlett);
-
-        go.cast.values.character = L"Bob Harris";
-        dtm->add_edge(CAST, (void*)(&go.cast), mLostInTranslation, pBill);
-
-        go.cast.values.character = L"Cristina";
-        dtm->add_edge(CAST, (void*)(&go.cast), mVickyCB, pScarlett);
-
-        go.cast.values.character = L"Maria Elena";
-         dtm->add_edge(CAST, (void*)(&go.cast), mVickyCB , pPenelope);
-
-        go.cast.values.character = L"Mary";
-        dtm->add_edge(CAST, (void*)(&go.cast), mManhattan, pDiane);
-
-        go.cast.values.character = L"Isaac";
-        dtm->add_edge(CAST, (void*)(&go.cast), mManhattan, pWoody);
-
-        // Add some DIRECTS edges
-        dtm->add_edge(DIRECTS, (void*)(&go.directs), pSofia, mLostInTranslation);
-        dtm->add_edge(DIRECTS, (void*)(&go.directs), pWoody, mVickyCB);
-        dtm->add_edge(DIRECTS, (void*)(&go.directs), pWoody, mManhattan);
-        // =================================================================
-
         Graph *g = dtm->get_graph();
 
         // Export to graphviz
@@ -107,7 +94,8 @@ int main(int argc, char *argv[])
         //ExportManager* x = static_cast<ExportManager*>(expMngr);
         g->Export(L"test.dot", Graphviz, expMngr);
         delete expMngr; 
-
+        */
+/*
         // Export PEOPLE to csv
         type_t peopleTypeId = g->FindType(L"PEOPLE");
         attr_t idAttrId = g->FindAttribute(peopleTypeId , L"ID");
@@ -133,14 +121,14 @@ int main(int argc, char *argv[])
         // Get the cast of the movies directed by Woody Allen
         Objects *castDirectedByWoody = g->Neighbors(directedByWoody , go.cast.types.type , Any);
         // Say hello to the people found
-        /*ObjectsIterator *it1 = directedByWoody->Iterator();
-          while (it1->HasNext())
-          {
-          oid_t people1Oid = it1->Next();
-          g->GetAttribute(people1Oid, peopleNameType, *value);
-          std::wcout << L"Hello " << value->GetString() << std::endl;
-          }
-          delete it1;*/
+        //        ObjectsIterator *it1 = directedByWoody->Iterator();
+        //          while (it1->HasNext())
+        //          {
+        //          oid_t people1Oid = it1->Next();
+        //          g->GetAttribute(people1Oid, peopleNameType, *value);
+        //          std::wcout << L"Hello " << value->GetString() << std::endl;
+        //          }
+        //          delete it1;
 
         // We don't need the directedByWoody collection anymore , so we should delete it
         delete directedByWoody;
@@ -167,13 +155,14 @@ int main(int argc, char *argv[])
             g->GetAttribute(peopleOid , go.people.types.name , *value);
             std::wcout << L"Hello " << value->GetString() << std::endl;
         }
-        
+
         delete value;
 
         // The ObjectsIterator must be deleted
         delete it;
         // The Objects must be deleted
         delete castFromBoth;
+        */
     }
     catch (sparksee::gdb::Error& e) {
         std::cerr << e.Message() << std::endl;
