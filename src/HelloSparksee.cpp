@@ -26,7 +26,7 @@ int main(int argc, char *argv[])
         GraphObjects go;
 
         dtm->create_objects(go);
-/*
+
         //Gnome
         go.gnome.values.id = 1;
         go.gnome.values.name = L"Untilopulus0";
@@ -49,7 +49,7 @@ int main(int argc, char *argv[])
         go.mine.values.id = 1;
         go.mine.values.name = L"Arhopolis";
         oid_t mine0 = dtm->add_node(MINE, (void*)(&go.mine)); 
-*/
+
         //Dragon
         go.dragon.values.id = 1;
         go.dragon.values.name = L"Kondragon0";
@@ -66,7 +66,7 @@ int main(int argc, char *argv[])
         go.ore.values.id = 1;
         go.ore.values.name = L"Gira0";
         oid_t ore0 = dtm->add_node(ORE, (void*)(&go.ore)); 
-/*
+
         go.ore.values.id = 2;
         go.ore.values.name = L"Gira1";
         oid_t ore1 = dtm->add_node(ORE, (void*)(&go.ore)); 
@@ -94,7 +94,7 @@ int main(int argc, char *argv[])
         //ExportManager* x = static_cast<ExportManager*>(expMngr);
         g->Export(L"test.dot", Graphviz, expMngr);
         delete expMngr; 
-        */
+        
 /*
         // Export PEOPLE to csv
         type_t peopleTypeId = g->FindType(L"PEOPLE");
