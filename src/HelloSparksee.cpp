@@ -22,21 +22,10 @@ int main(int argc, char *argv[])
 {
     try 
     {
-        // Create a database
-        SparkseeConfig cfg;
-        Sparksee *sparksee = new Sparksee(cfg);
-        Database *db = sparksee->Create(L"HelloSparksee.gdb", L"HelloSparksee");
-
-        // Create a new session of working with database
-        Session *sess = db->NewSession();
-        Graph *g = sess->GetGraph();
-
-        DataManager dtm;
-        dtm.g = g;
-
+        const DataManager *dtm = DataManager::get_instanse();
         GraphObjects go;
 
-        dtm.create_objects(go);
+        dtm->create_objects(go);
 
         // =================================================================
         // ADDING NODES
@@ -45,42 +34,42 @@ int main(int argc, char *argv[])
         go.movie.values.id = 1;
         go.movie.values.title = L"Lost in Translation";
         go.movie.values.year = 2003;
-        oid_t mLostInTranslation = dtm.add_node(MOVIE, (void*)(&go.movie));
+        oid_t mLostInTranslation = dtm->add_node(MOVIE, (void*)(&go.movie));
 
         go.movie.values.id = 2;
         go.movie.values.title =L"Vicky Cristina Barcelona";
         go.movie.values.year = 2008;
-        oid_t mVickyCB = dtm.add_node(MOVIE, (void*)(&go.movie));
+        oid_t mVickyCB = dtm->add_node(MOVIE, (void*)(&go.movie));
 
         go.movie.values.id = 3;
         go.movie.values.title = L"Manhattan";
         go.movie.values.year = 1979;
-        oid_t mManhattan = dtm.add_node(MOVIE, (void*)(&go.movie));
+        oid_t mManhattan = dtm->add_node(MOVIE, (void*)(&go.movie));
 
        // Add some PEOPLE nodes
         go.people.values.id = 1;
         go.people.values.name = L"Scarlett Johansson";
-        oid_t pScarlett = dtm.add_node(PEOPLE, (void*)(&go.people)); 
+        oid_t pScarlett = dtm->add_node(PEOPLE, (void*)(&go.people)); 
         
         go.people.values.id = 2;
         go.people.values.name = L"Bill Murray";
-        oid_t pBill = dtm.add_node(PEOPLE, (void*)(&go.people)); 
+        oid_t pBill = dtm->add_node(PEOPLE, (void*)(&go.people)); 
 
         go.people.values.id = 3;
         go.people.values.name = L"Sofia Coppola";
-        oid_t pSofia = dtm.add_node(PEOPLE, (void*)(&go.people)); 
+        oid_t pSofia = dtm->add_node(PEOPLE, (void*)(&go.people)); 
 
         go.people.values.id = 4;
         go.people.values.name = L"Woody Allen";
-        oid_t pWoody = dtm.add_node(PEOPLE, (void*)(&go.people)); 
+        oid_t pWoody = dtm->add_node(PEOPLE, (void*)(&go.people)); 
 
         go.people.values.id = 5;
         go.people.values.name = L"Penélope Cruz";
-        oid_t pPenelope = dtm.add_node(PEOPLE, (void*)(&go.people)); 
+        oid_t pPenelope = dtm->add_node(PEOPLE, (void*)(&go.people)); 
 
         go.people.values.id = 6;
         go.people.values.name = L"Diane Keaton";
-        oid_t pDiane = dtm.add_node(PEOPLE, (void*)(&go.people)); 
+        oid_t pDiane = dtm->add_node(PEOPLE, (void*)(&go.people)); 
         // =============================================================
 
         // =================================================================
@@ -88,28 +77,30 @@ int main(int argc, char *argv[])
         // Add some CAST edges
         // Remember that we are reusing the Value class instance to set the attributes
         go.cast.values.character = L"Charlotte";
-        dtm.add_edge(CAST, (void*)(&go.cast), mLostInTranslation, pScarlett);
+        dtm->add_edge(CAST, (void*)(&go.cast), mLostInTranslation, pScarlett);
 
         go.cast.values.character = L"Bob Harris";
-        dtm.add_edge(CAST, (void*)(&go.cast), mLostInTranslation, pBill);
+        dtm->add_edge(CAST, (void*)(&go.cast), mLostInTranslation, pBill);
 
         go.cast.values.character = L"Cristina";
-        dtm.add_edge(CAST, (void*)(&go.cast), mVickyCB, pScarlett);
+        dtm->add_edge(CAST, (void*)(&go.cast), mVickyCB, pScarlett);
 
         go.cast.values.character = L"Maria Elena";
-         dtm.add_edge(CAST, (void*)(&go.cast), mVickyCB , pPenelope);
+         dtm->add_edge(CAST, (void*)(&go.cast), mVickyCB , pPenelope);
 
         go.cast.values.character = L"Mary";
-        dtm.add_edge(CAST, (void*)(&go.cast), mManhattan, pDiane);
+        dtm->add_edge(CAST, (void*)(&go.cast), mManhattan, pDiane);
 
         go.cast.values.character = L"Isaac";
-        dtm.add_edge(CAST, (void*)(&go.cast), mManhattan, pWoody);
+        dtm->add_edge(CAST, (void*)(&go.cast), mManhattan, pWoody);
 
         // Add some DIRECTS edges
-        dtm.add_edge(DIRECTS, (void*)(&go.directs), pSofia, mLostInTranslation);
-        dtm.add_edge(DIRECTS, (void*)(&go.directs), pWoody, mVickyCB);
-        dtm.add_edge(DIRECTS, (void*)(&go.directs), pWoody, mManhattan);
+        dtm->add_edge(DIRECTS, (void*)(&go.directs), pSofia, mLostInTranslation);
+        dtm->add_edge(DIRECTS, (void*)(&go.directs), pWoody, mVickyCB);
+        dtm->add_edge(DIRECTS, (void*)(&go.directs), pWoody, mManhattan);
         // =================================================================
+
+        Graph *g = dtm->get_graph();
 
         // Export to graphviz
         ExportManager * expMngr = new MyExport();
@@ -177,18 +168,12 @@ int main(int argc, char *argv[])
             std::wcout << L"Hello " << value->GetString() << std::endl;
         }
         
-        delete g;
         delete value;
 
         // The ObjectsIterator must be deleted
         delete it;
         // The Objects must be deleted
         delete castFromBoth;
-
-        delete sess;
-        delete db;
-        delete sparksee;
-
     }
     catch (sparksee::gdb::Error& e) {
         std::cerr << e.Message() << std::endl;

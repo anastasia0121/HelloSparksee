@@ -17,7 +17,25 @@
 using namespace sparksee::gdb;
 using namespace sparksee::io;
 
-void DataManager::create_objects(GraphObjects &go)
+DataManager::DataManager()
+{
+    // Create a database
+    SparkseeConfig cfg;
+    sparksee = new Sparksee(cfg);
+    db = sparksee->Create(L"HelloSparksee.gdb", L"HelloSparksee");
+
+    // Create a new session of working with database
+    sess = db->NewSession();
+    g = sess->GetGraph();
+}
+
+const DataManager * DataManager::get_instanse()
+{
+    static DataManager dm; //only linux after c++11
+    return &dm;
+}
+
+void DataManager::create_objects(GraphObjects &go) const
 {
     // Add a node type for the movies , with a unique identifier and two indexed
     // attributes
@@ -40,7 +58,7 @@ void DataManager::create_objects(GraphObjects &go)
             go.people.types.type, go.movie.types.type, false);
 }
 
-oid_t DataManager::add_node(int16_t type, void *info)
+oid_t DataManager::add_node(int16_t type, void *info) const
 {
     static Value *value = new Value();
 
@@ -76,7 +94,7 @@ oid_t DataManager::add_node(int16_t type, void *info)
     }
 }
 
-oid_t DataManager::add_edge(int16_t type, void *info, oid_t left, oid_t right)
+oid_t DataManager::add_edge(int16_t type, void *info, oid_t left, oid_t right) const
 {
     static Value *value = new Value();
 
