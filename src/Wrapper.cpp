@@ -29,6 +29,15 @@ DataManager::DataManager()
     g = sess->GetGraph();
 }
 
+DataManager::~DataManager()
+{
+    delete g;
+    delete sess;
+    delete db;
+    delete sparksee;
+}
+
+
 const DataManager * DataManager::get_instanse()
 {
     static DataManager dm; //only linux after c++11

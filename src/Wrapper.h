@@ -41,8 +41,8 @@ public:
     //see add node
     oid_t add_edge(int16_t type, void *info, oid_t left, oid_t right) const;
    
-    ~DataManager() = default;
-        
+    ~DataManager();
+            
     //May be we should forbid move constructor and operator
     //like copy constructor and iterator
     DataManager (const DataManager &) = delete;
