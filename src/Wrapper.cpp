@@ -52,7 +52,7 @@ void DataManager::create_objects(GraphObjects &go) const
     go.gnome.types.name  = g->NewAttribute(go.gnome.types.type, L"Name",      String,  Indexed);
     go.gnome.types.age   = g->NewAttribute(go.gnome.types.type, L"Age",       Integer, Indexed);
     go.gnome.types.str   = g->NewAttribute(go.gnome.types.type, L"Strenght",  Integer, Indexed);
-    go.gnome.types.intel = g->NewAttribute(go.gnome.types.type, L"Intellect", Integer, Indexed);
+    go.gnome.types.intel = g->NewAttribute(go.gnome.types.type, L"Intelligence", Integer, Indexed);
     go.gnome.types.cha   = g->NewAttribute(go.gnome.types.type, L"Character", Integer, Indexed);
     go.gnome.types.skill = g->NewAttribute(go.gnome.types.type, L"Skills",    String,  Indexed);
 
@@ -78,9 +78,9 @@ void DataManager::create_objects(GraphObjects &go) const
     go.ore.types.id   = g->NewAttribute(go.ore.types.type , L"Id",   Long,   Unique);
     go.ore.types.name = g->NewAttribute(go.ore.types.type , L"Name", String, Indexed);
 
-    //Bellong 
+    //Belong 
     go.belong.types.type = g->NewEdgeType(L"Belong", false , false); //not ore TODO
-    go.belong.types.prof = g->NewAttribute(go.belong.types.type, L"Pofession", String, Basic);
+    go.belong.types.prof = g->NewAttribute(go.belong.types.type, L"Profession", String, Basic);
 
     //Directs
     go.directs.types.type = g->NewRestrictedEdgeType(L"DIRECTS", 
