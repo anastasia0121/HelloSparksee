@@ -40,6 +40,9 @@ public:
  
     //see add node
     oid_t add_edge(int16_t type, void *info, oid_t left, oid_t right) const;
+    
+    // Export all nodes of given "type" to csv file named "file_name"
+    void export_nodes_to_csv(int16_t type, const std::wstring &file_name) const;
    
     ~DataManager();
             

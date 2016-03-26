@@ -7,8 +7,6 @@
 #include "gdb/Export.h"
 #include "gdb/Objects.h"
 #include "gdb/ObjectsIterator.h"
-#include "io/CSVWriter.h"
-#include "io/NodeTypeExporter.h"
 
 #include "Type.h"
 #include "MyExport.h"
@@ -89,22 +87,26 @@ int main(int argc, char *argv[])
         // =================================================================
         Graph *g = dtm->get_graph();
 
+        dtm->export_nodes_to_csv(GNOME, L"export/gnome.csv");
+        dtm->export_nodes_to_csv(DRAGON, L"export/dragon.csv");
+        dtm->export_nodes_to_csv(MINE, L"export/mine.csv");
+        dtm->export_nodes_to_csv(ORE, L"export/ore.csv");
+
         // Export to graphviz
         ExportManager * expMngr = new MyExport();
         //ExportManager* x = static_cast<ExportManager*>(expMngr);
         g->Export(L"test.dot", Graphviz, expMngr);
         delete expMngr; 
-        
-/*
+
         // Export PEOPLE to csv
-        type_t peopleTypeId = g->FindType(L"PEOPLE");
-        attr_t idAttrId = g->FindAttribute(peopleTypeId , L"ID");
-        attr_t nameAttrId = g->FindAttribute(peopleTypeId , L"NAME");
+        type_t peopleTypeId = g->FindType(L"Gnome");
+        attr_t idAttrId = g->FindAttribute(peopleTypeId , L"Id");
+        attr_t nameAttrId = g->FindAttribute(peopleTypeId , L"Name");
         // configure CSV writer
         CSVWriter csv;
         csv.SetSeparator(L"|");
         csv.SetAutoQuotes(true);
-        csv.Open(L"people.csv");
+        csv.Open(L"export/gnome.csv");
         // export PEOPLE node type: Name and Age attributes
         AttributeList attrs;
         attrs.Add(idAttrId);
@@ -112,7 +114,7 @@ int main(int argc, char *argv[])
         NodeTypeExporter nte(csv, *g, peopleTypeId, attrs);
         nte.Run();
         csv.Close();
-
+/*
         // =================================================================
         // Queries
         // Get the movies directed by Woody Allen

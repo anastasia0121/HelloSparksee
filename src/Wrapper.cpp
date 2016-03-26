@@ -53,14 +53,14 @@ void DataManager::create_objects(GraphObjects &go) const
     go.gnome.types.age   = g->NewAttribute(go.gnome.types.type, L"Age",       Integer, Indexed);
     go.gnome.types.str   = g->NewAttribute(go.gnome.types.type, L"Strenght",  Integer, Indexed);
     go.gnome.types.intel = g->NewAttribute(go.gnome.types.type, L"Intelligence", Integer, Indexed);
-    go.gnome.types.cha   = g->NewAttribute(go.gnome.types.type, L"Character", Integer, Indexed);
+    go.gnome.types.cha   = g->NewAttribute(go.gnome.types.type, L"Charisma",  Integer, Indexed);
     go.gnome.types.skill = g->NewAttribute(go.gnome.types.type, L"Skills",    String,  Indexed);
 
     //Mine
     go.mine.types.type = g->NewNodeType(L"Mine");
     go.mine.types.id   = g->NewAttribute(go.mine.types.type , L"Id",   Long,   Unique);
     go.mine.types.name = g->NewAttribute(go.mine.types.type , L"Name", String, Indexed);
-    
+
     //Dragon
     go.dragon.types.type  = g->NewNodeType(L"Dragon");
     go.dragon.types.id    = g->NewAttribute(go.dragon.types.type, L"Id",        Long,    Unique);
@@ -70,7 +70,7 @@ void DataManager::create_objects(GraphObjects &go) const
     go.dragon.types.size  = g->NewAttribute(go.dragon.types.type, L"Size",      Integer, Indexed);
     go.dragon.types.age   = g->NewAttribute(go.dragon.types.type, L"Age",       Integer, Indexed);
     go.dragon.types.str   = g->NewAttribute(go.dragon.types.type, L"Strenght",  Integer, Indexed);
-    go.dragon.types.cha   = g->NewAttribute(go.dragon.types.type, L"Character", Integer, Indexed);
+    go.dragon.types.cha   = g->NewAttribute(go.dragon.types.type, L"Charisma",  Integer, Indexed);
     go.dragon.types.skill = g->NewAttribute(go.dragon.types.type, L"Skills",    String,  Indexed);
 
     //Ore
@@ -207,5 +207,78 @@ oid_t DataManager::add_edge(int16_t type, void *info, oid_t left, oid_t right) c
                     return new_edge; 
                 }
         }
+    }
+}
+
+void DataManager::export_nodes_to_csv(int16_t type, const std::wstring &file_name) const
+{
+    if (g != NULL)
+    {
+        // Type of node to export
+        type_t exportType;
+        // All attributes of type to export
+        AttributeList attrs;
+
+        switch(type)
+        {
+            case GNOME: 
+                {  
+                    // Export all GNOMEs to csv
+                    exportType = g->FindType(L"Gnome");
+                    // Export attributes of GNOME
+                    attrs.Add(g->FindAttribute(exportType, L"Id"));
+                    attrs.Add(g->FindAttribute(exportType, L"Name"));
+                    attrs.Add(g->FindAttribute(exportType, L"Age"));
+                    attrs.Add(g->FindAttribute(exportType, L"Strenght"));
+                    attrs.Add(g->FindAttribute(exportType, L"Intelligence"));
+                    attrs.Add(g->FindAttribute(exportType, L"Charisma"));
+                    attrs.Add(g->FindAttribute(exportType, L"Skills"));
+                    break;
+                }
+            case MINE:
+                {
+                    // Export all MINEs to csv
+                    exportType = g->FindType(L"Mine");  
+                    // Export attributes of MINE
+                    attrs.Add(g->FindAttribute(exportType, L"Id"));
+                    attrs.Add(g->FindAttribute(exportType, L"Name")); 
+                    break;
+                }
+            case DRAGON: 
+                {
+                    // Export all DRAGONSs to csv
+                    exportType = g->FindType(L"Dragon");
+                    // Export attributes of DRAGON 
+                    attrs.Add(g->FindAttribute(exportType, L"Id"));
+                    attrs.Add(g->FindAttribute(exportType, L"Name"));
+                    attrs.Add(g->FindAttribute(exportType, L"Color"));
+                    attrs.Add(g->FindAttribute(exportType, L"Cost"));
+                    attrs.Add(g->FindAttribute(exportType, L"Size"));
+                    attrs.Add(g->FindAttribute(exportType, L"Age"));
+                    attrs.Add(g->FindAttribute(exportType, L"Strenght"));
+                    attrs.Add(g->FindAttribute(exportType, L"Charisma"));
+                    attrs.Add(g->FindAttribute(exportType, L"Skills"));
+                    break;
+                }  
+            case ORE:
+                {   
+                    // Export all OREs to csv
+                    exportType = g->FindType(L"Ore");  
+                    // Export attributes of ORE 
+                    attrs.Add(g->FindAttribute(exportType, L"Id"));
+                    attrs.Add(g->FindAttribute(exportType, L"Name"));
+                    break; 
+                }
+        }
+
+        // configure CSV writer
+        CSVWriter csv;
+        csv.SetSeparator(L"|");
+        csv.SetAutoQuotes(true);
+        csv.Open(file_name);
+
+        NodeTypeExporter nte(csv, *g, exportType, attrs);
+        nte.Run();
+        csv.Close();
     }
 }
