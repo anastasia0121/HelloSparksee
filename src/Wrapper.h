@@ -43,6 +43,9 @@ public:
     
     // Export all nodes of given "type" to csv file named "file_name"
     void export_nodes_to_csv(int16_t type, const std::wstring &file_name) const;
+    
+    // Import all nodes of given "type" from csv file named "file_name"
+    void import_nodes_from_csv(int16_t type, const std::wstring &file_name) const;
    
     ~DataManager();
             

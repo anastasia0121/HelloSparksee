@@ -25,6 +25,7 @@ int main(int argc, char *argv[])
 
         dtm->create_objects(go);
 
+        /*
         //Gnome
         go.gnome.values.id = 1;
         go.gnome.values.name = L"Untilopulus0";
@@ -59,6 +60,18 @@ int main(int argc, char *argv[])
         go.dragon.values.cha = 2003;
         go.dragon.values.skill = L"Brilliant";
         oid_t dragon0 = dtm->add_node(DRAGON, (void*)(&go.dragon));
+        //Dragon
+        go.dragon.values.id = 2;
+        go.dragon.values.name = L"Kondragon1";
+        go.dragon.values.age = 2003;
+        go.dragon.values.color = 2003;
+        go.dragon.values.size = 2003;
+        go.dragon.values.cost = 2003;
+        go.dragon.values.str = 2003;
+        go.dragon.values.cha = 2003;
+        go.dragon.values.skill = L"Brilliant";
+        oid_t dragon1 = dtm->add_node(DRAGON, (void*)(&go.dragon));
+
 
         //Ore
         go.ore.values.id = 1;
@@ -85,12 +98,18 @@ int main(int argc, char *argv[])
         dtm->add_edge(MINES, (void*)(&go.mines), ore0, mine0);
         dtm->add_edge(MINES, (void*)(&go.mines), ore1, mine0);
         // =================================================================
+        */
         Graph *g = dtm->get_graph();
 
-        dtm->export_nodes_to_csv(GNOME, L"export/gnome.csv");
+        /*dtm->export_nodes_to_csv(GNOME, L"export/gnome.csv");
         dtm->export_nodes_to_csv(DRAGON, L"export/dragon.csv");
         dtm->export_nodes_to_csv(MINE, L"export/mine.csv");
-        dtm->export_nodes_to_csv(ORE, L"export/ore.csv");
+        dtm->export_nodes_to_csv(ORE, L"export/ore.csv");*/
+
+        dtm->import_nodes_from_csv(GNOME, L"export/gnome.csv");
+        dtm->import_nodes_from_csv(DRAGON, L"export/dragon.csv");
+        dtm->import_nodes_from_csv(MINE, L"export/mine.csv");
+        dtm->import_nodes_from_csv(ORE, L"export/ore.csv");
 
         // Export to graphviz
         ExportManager * expMngr = new MyExport();
@@ -98,23 +117,7 @@ int main(int argc, char *argv[])
         g->Export(L"test.dot", Graphviz, expMngr);
         delete expMngr; 
 
-        // Export PEOPLE to csv
-        type_t peopleTypeId = g->FindType(L"Gnome");
-        attr_t idAttrId = g->FindAttribute(peopleTypeId , L"Id");
-        attr_t nameAttrId = g->FindAttribute(peopleTypeId , L"Name");
-        // configure CSV writer
-        CSVWriter csv;
-        csv.SetSeparator(L"|");
-        csv.SetAutoQuotes(true);
-        csv.Open(L"export/gnome.csv");
-        // export PEOPLE node type: Name and Age attributes
-        AttributeList attrs;
-        attrs.Add(idAttrId);
-        attrs.Add(nameAttrId);
-        NodeTypeExporter nte(csv, *g, peopleTypeId, attrs);
-        nte.Run();
-        csv.Close();
-/*
+        /*
         // =================================================================
         // Queries
         // Get the movies directed by Woody Allen
