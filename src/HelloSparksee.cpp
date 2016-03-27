@@ -117,6 +117,13 @@ int main(int argc, char *argv[])
         // Queries
         // Get the movies directed by Woody Allen
         // */
+        
+        Value *value = new Value();
+
+        dtm->remove_node(go.dragon.types.name, *value);
+
+        delete value;
+
         Objects *directedByWoody = g->Neighbors(mine0, go.belong.types.type, Any);
         delete directedByWoody;
 /*

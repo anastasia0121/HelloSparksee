@@ -375,3 +375,25 @@ void DataManager::import_nodes_from_csv(int16_t type, const std::wstring &file_n
         csv.Close();
     }
 }
+
+void DataManager::remove_node(attr_t attr, Value value) const
+{
+    type_t belong_type = g->FindType(L"Belong");  
+    type_t mines_type = g->FindType(L"Mines");  
+
+    Objects * node = g->Select(attr, Equal, value.SetString(L"Kondragon1"));
+
+    Objects *edges_belongs = g->Explode(node, 
+            belong_type, Any);
+    g->Drop(edges_belongs);
+    delete edges_belongs;
+
+    Objects *edges_mines = g->Explode(node, 
+            mines_type, Any);
+
+    delete edges_mines;
+
+    g->Drop(node);
+
+    delete node;
+}

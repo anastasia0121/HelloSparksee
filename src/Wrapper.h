@@ -38,6 +38,8 @@ public:
     //info - struct which contain type and attributes of object
     oid_t add_node(int16_t type, void *info) const;
  
+    void remove_node(attr_t attr, Value value) const;
+
     //see add node
     oid_t add_edge(int16_t type, void *info, oid_t left, oid_t right) const;
     
