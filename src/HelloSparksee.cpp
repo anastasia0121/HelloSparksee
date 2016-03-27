@@ -117,7 +117,8 @@ int main(int argc, char *argv[])
         // Queries
         // Get the movies directed by Woody Allen
         // */
-        Objects *directedByWoody = g->Neighbors(mine0, go.belong.types.type, Outgoing);
+        Objects *directedByWoody = g->Neighbors(mine0, go.belong.types.type, Any);
+        delete directedByWoody;
 /*
         // Get the cast of the movies directed by Woody Allen
         Objects *castDirectedByWoody = g->Neighbors(directedByWoody , go.cast.types.type , Any);

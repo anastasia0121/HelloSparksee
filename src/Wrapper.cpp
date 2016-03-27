@@ -23,6 +23,7 @@ DataManager::DataManager()
 {
     // Create a database
     SparkseeConfig cfg;
+    cfg.SetRecoveryEnabled(true);
     sparksee = new Sparksee(cfg);
     db = sparksee->Create(L"HelloSparksee.gdb", L"HelloSparksee");
 
