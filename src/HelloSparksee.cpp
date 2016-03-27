@@ -25,7 +25,6 @@ int main(int argc, char *argv[])
 
         dtm->create_objects(go);
 
-        /*
         //Gnome
         go.gnome.values.id = 1;
         go.gnome.values.name = L"Untilopulus0";
@@ -98,7 +97,6 @@ int main(int argc, char *argv[])
         dtm->add_edge(MINES, (void*)(&go.mines), ore0, mine0);
         dtm->add_edge(MINES, (void*)(&go.mines), ore1, mine0);
         // =================================================================
-        */
         Graph *g = dtm->get_graph();
 
         /*dtm->export_nodes_to_csv(GNOME, L"export/gnome.csv");
@@ -106,10 +104,10 @@ int main(int argc, char *argv[])
         dtm->export_nodes_to_csv(MINE, L"export/mine.csv");
         dtm->export_nodes_to_csv(ORE, L"export/ore.csv");*/
 
-        dtm->import_nodes_from_csv(GNOME, L"export/gnome.csv");
+        /*dtm->import_nodes_from_csv(GNOME, L"export/gnome.csv");
         dtm->import_nodes_from_csv(DRAGON, L"export/dragon.csv");
         dtm->import_nodes_from_csv(MINE, L"export/mine.csv");
-        dtm->import_nodes_from_csv(ORE, L"export/ore.csv");
+        dtm->import_nodes_from_csv(ORE, L"export/ore.csv");*/
 
         // Export to graphviz
         ExportManager * expMngr = new MyExport();
