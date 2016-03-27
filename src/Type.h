@@ -117,14 +117,6 @@ struct Belong
     }values;
 };
 
-struct Directs
-{
-    struct types
-    {
-        type_t type;
-    } types;
-};
-
 struct Mines
 {
     struct types
@@ -138,7 +130,6 @@ enum {
     MINE,
     DRAGON,
     ORE,
-    DIRECTS,
     BELONG,
     MINES
 };
@@ -150,7 +141,6 @@ struct GraphObjects
     struct Dragon dragon;
     struct Ore ore;
     struct Belong belong;
-    struct Directs directs;
     struct Mines mines;
 };
 

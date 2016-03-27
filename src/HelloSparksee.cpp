@@ -90,9 +90,6 @@ int main(int argc, char *argv[])
         go.belong.values.prof = L"Ruler";
         dtm->add_edge(BELONG, (void*)(&go.belong), gnome2, mine0);
 
-        //Directs
-        dtm->add_edge(DIRECTS, (void*)(&go.directs), gnome2, mine0);
-
         //Mines
         dtm->add_edge(MINES, (void*)(&go.mines), ore0, mine0);
         dtm->add_edge(MINES, (void*)(&go.mines), ore1, mine0);

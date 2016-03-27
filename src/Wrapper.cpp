@@ -84,10 +84,6 @@ void DataManager::create_objects(GraphObjects &go) const
     go.belong.types.type = g->NewEdgeType(L"Belong", false , false); //not ore TODO
     go.belong.types.prof = g->NewAttribute(go.belong.types.type, L"Profession", String, Basic);
 
-    //Directs
-    go.directs.types.type = g->NewRestrictedEdgeType(L"DIRECTS", 
-            go.gnome.types.type, go.mine.types.type, false);
-
     //Mines
     go.mines.types.type = g->NewRestrictedEdgeType(L"MINES", 
             go.ore.types.type, go.mine.types.type, false);
@@ -191,13 +187,6 @@ oid_t DataManager::add_edge(int16_t type, void *info, oid_t left, oid_t right) c
                     oid_t new_edge = g->NewEdge(tmp->types.type, left, right);
                     g->SetAttribute(new_edge, tmp->types.prof, 
                             value->SetString(tmp->values.prof));
-
-                    return new_edge; 
-                }
-            case DIRECTS:
-                {
-                    Directs *tmp = static_cast<Directs*>(info);
-                    oid_t new_edge = g->NewEdge(tmp->types.type, left, right);
 
                     return new_edge; 
                 }
