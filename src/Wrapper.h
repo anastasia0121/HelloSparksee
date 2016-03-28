@@ -1,5 +1,5 @@
-#ifndef __IFMO_DISTRIBUTED_CLASS_WRAPPER__H
-#define __IFMO_DISTRIBUTED_CLASS_WRAPPER__H
+#ifndef __CLASS_WRAPPER__H
+#define __CLASS_WRAPPER__H
 
 #include <iostream> 
 
@@ -38,11 +38,15 @@ public:
     //info - struct which contain type and attributes of object
     oid_t add_node(int16_t type, void *info) const;
  
-    void remove_node(attr_t attr, Value value) const;
+    void remove_node(int16_t type, attr_t attr, Value value) const;
+
+    void move_node(int16_t type, attr_t attr, Value value) const;
 
     //see add node
     oid_t add_edge(int16_t type, void *info, oid_t left, oid_t right) const;
     
+    void garbage_generate(GraphObjects &go) const;
+
     // Export all nodes of given "type" to csv file named "file_name"
     void export_nodes_to_csv(int16_t type, const std::wstring &file_name) const;
     
@@ -65,4 +69,4 @@ private:
      Session * sess;
      Graph *g;
 };
-#endif // __IFMO_DISTRIBUTED_CLASS_WRAPPER__H
+#endif // __CLASS_WRAPPER__H

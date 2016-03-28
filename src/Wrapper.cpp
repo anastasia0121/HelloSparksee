@@ -12,6 +12,8 @@
 #include "io/NodeTypeExporter.h"
 #include "io/NodeTypeLoader.h"
 
+#include <array>
+
 #include "MyExport.h"
 #include "Wrapper.h"
 #include "Type.h"
@@ -39,7 +41,6 @@ DataManager::~DataManager()
     delete db;
     delete sparksee;
 }
-
 
 const DataManager * DataManager::get_instanse()
 {
@@ -315,12 +316,12 @@ void DataManager::import_nodes_from_csv(int16_t type, const std::wstring &file_n
                     // Import attributes of MINE
                     attrs.Add(g->FindAttribute(importType, L"Id"));
                     attrs.Add(g->FindAttribute(importType, L"Name")); 
-                    
+
                     for (int i = 0; i < 2; ++i)
                     {
                         attrPos.Add(i);
                     }
-                    
+
                     break;
                 }
             case DRAGON: 
@@ -337,7 +338,7 @@ void DataManager::import_nodes_from_csv(int16_t type, const std::wstring &file_n
                     attrs.Add(g->FindAttribute(importType, L"Strength"));
                     attrs.Add(g->FindAttribute(importType, L"Charisma"));
                     attrs.Add(g->FindAttribute(importType, L"Skills"));
-                    
+
                     for (int i = 0; i < 9; ++i)
                     {
                         attrPos.Add(i);
@@ -352,7 +353,7 @@ void DataManager::import_nodes_from_csv(int16_t type, const std::wstring &file_n
                     // Import attributes of ORE 
                     attrs.Add(g->FindAttribute(importType, L"Id"));
                     attrs.Add(g->FindAttribute(importType, L"Name"));
-                    
+
                     for (int i = 0; i < 2; ++i)
                     {
                         attrPos.Add(i);
@@ -376,24 +377,134 @@ void DataManager::import_nodes_from_csv(int16_t type, const std::wstring &file_n
     }
 }
 
-void DataManager::remove_node(attr_t attr, Value value) const
+void DataManager::remove_node(int16_t type, attr_t attr, Value value) const
 {
-    type_t belong_type = g->FindType(L"Belong");  
-    type_t mines_type = g->FindType(L"Mines");  
+    Objects * node = g->Select(attr, Equal, value);
 
-    Objects * node = g->Select(attr, Equal, value.SetString(L"Kondragon1"));
+    ObjectsIterator *it = node->Iterator();
 
-    Objects *edges_belongs = g->Explode(node, 
-            belong_type, Any);
-    g->Drop(edges_belongs);
-    delete edges_belongs;
+    while (it->HasNext())
+    {
+        switch(type)
+        {
+            case GNOME:
+            case DRAGON:
+                {
+                    type_t belong_type = g->FindType(L"Belong");  
+                    Objects *edges_belongs = g->Explode(node, 
+                            belong_type, Any);
+                    g->Drop(edges_belongs);
+                    delete edges_belongs;
 
-    Objects *edges_mines = g->Explode(node, 
-            mines_type, Any);
+                    break;
+                }
+            case ORE:
+                {
+                    type_t mines_type = g->FindType(L"Mines");  
+                    Objects *edges_mines = g->Explode(node, 
+                            mines_type, Any);
+                    g->Drop(edges_mines);
+                    delete edges_mines;
 
-    delete edges_mines;
+                    break;
+                }
+            case MINE:
+                {
+                    type_t belong_type = g->FindType(L"Belong");  
+                    Objects *edges_belongs = g->Explode(node, 
+                            belong_type, Any);
+                    g->Drop(edges_belongs);
+                    delete edges_belongs;
 
+                    type_t mines_type = g->FindType(L"Mines");  
+                    Objects *edges_mines = g->Explode(node, 
+                            mines_type, Any);
+                    g->Drop(edges_mines);
+                    delete edges_mines;
+
+                    break;
+                }
+
+        }
+    }
+    delete it;
     g->Drop(node);
-
     delete node;
+}
+
+void DataManager::move_node(int16_t type, attr_t attr, Value value) const
+{
+    Objects * objs = g->Select(attr, Equal, value);
+    ObjectsIterator *it = objs->Iterator();
+
+    while (it->HasNext())
+    {
+        oid_t node = it->Next();
+        g->SetAttribute(node, attr, value);
+    }
+
+    delete it;
+    delete objs;
+}
+
+void DataManager::garbage_generate(GraphObjects &go) const
+{
+    const size_t gnome_count = 2;
+    const size_t mine_count = 1;
+    const size_t dragon_count = 2;
+    const size_t ore_count = 1;
+
+    std::array<oid_t, mine_count> mine;
+
+    for (int i = 0; i < mine_count; ++i)
+    {
+        //Mine
+        go.mine.values.id = i;
+        go.mine.values.name = L"Arhopolis";
+        mine[i] = add_node(MINE, (void*)(&go.mine)); 
+    }
+
+    for (int i = 0; i < gnome_count; ++i)
+    {
+        //Gnome
+        go.gnome.values.id = i;
+        go.gnome.values.name = L"Untilopulus0";
+        go.gnome.values.age = 2003;
+        go.gnome.values.str = 2003;
+        go.gnome.values.intel = 2003;
+        go.gnome.values.cha = 2003;
+        go.gnome.values.skill = L"Brilliant";
+        oid_t gnome = add_node(GNOME, (void*)(&go.gnome));
+        //Belong
+        go.belong.values.prof = L"Miner";
+        add_edge(BELONG, (void*)(&go.belong), gnome, mine[0]);
+    }
+
+    for (int i = 0; i < gnome_count; ++i)
+    {
+        //Dragon
+        go.dragon.values.id = i;
+        go.dragon.values.name = L"Kondragon0";
+        go.dragon.values.age = 2003;
+        go.dragon.values.color = 2003;
+        go.dragon.values.size = 2003;
+        go.dragon.values.cost = 2003;
+        go.dragon.values.str = 2003;
+        go.dragon.values.cha = 2003;
+        go.dragon.values.skill = L"Brilliant";
+        oid_t dragon = add_node(DRAGON, (void*)(&go.dragon));
+        //Belong
+        go.belong.values.prof = L"Dragon";
+        add_edge(BELONG, (void*)(&go.belong), dragon, mine[0]);
+    }
+
+    for (int i = 0; i < ore_count; ++i)
+    {
+        //Ore
+        go.ore.values.id = i;
+        go.ore.values.name = L"Gira0";
+        oid_t ore = add_node(ORE, (void*)(&go.ore)); 
+        //Mines
+        add_edge(MINES, (void*)(&go.mines), ore, mine[0]);
+    }
 }

@@ -15,7 +15,6 @@
 using namespace sparksee::gdb;
 using namespace sparksee::io;
 
-
 int main(int argc, char *argv[]) 
 {
     try 
@@ -25,75 +24,8 @@ int main(int argc, char *argv[])
 
         dtm->create_objects(go);
 
-        //Gnome
-        go.gnome.values.id = 1;
-        go.gnome.values.name = L"Untilopulus0";
-        go.gnome.values.age = 2003;
-        go.gnome.values.str = 2003;
-        go.gnome.values.intel = 2003;
-        go.gnome.values.cha = 2003;
-        go.gnome.values.skill = L"Brilliant";
-        oid_t gnome0 = dtm->add_node(GNOME, (void*)(&go.gnome));
+        dtm->garbage_generate(go);
 
-        go.gnome.values.id = 2;
-        go.gnome.values.name = L"Untilopulus1";
-        oid_t gnome1 = dtm->add_node(GNOME, (void*)(&go.gnome));
-
-        go.gnome.values.id = 3;
-        go.gnome.values.name = L"Untilopulus2";
-        oid_t gnome2 = dtm->add_node(GNOME, (void*)(&go.gnome));
-
-        //Mine
-        go.mine.values.id = 1;
-        go.mine.values.name = L"Arhopolis";
-        oid_t mine0 = dtm->add_node(MINE, (void*)(&go.mine)); 
-
-        //Dragon
-        go.dragon.values.id = 1;
-        go.dragon.values.name = L"Kondragon0";
-        go.dragon.values.age = 2003;
-        go.dragon.values.color = 2003;
-        go.dragon.values.size = 2003;
-        go.dragon.values.cost = 2003;
-        go.dragon.values.str = 2003;
-        go.dragon.values.cha = 2003;
-        go.dragon.values.skill = L"Brilliant";
-        oid_t dragon0 = dtm->add_node(DRAGON, (void*)(&go.dragon));
-        //Dragon
-        go.dragon.values.id = 2;
-        go.dragon.values.name = L"Kondragon1";
-        go.dragon.values.age = 2003;
-        go.dragon.values.color = 2003;
-        go.dragon.values.size = 2003;
-        go.dragon.values.cost = 2003;
-        go.dragon.values.str = 2003;
-        go.dragon.values.cha = 2003;
-        go.dragon.values.skill = L"Brilliant";
-        oid_t dragon1 = dtm->add_node(DRAGON, (void*)(&go.dragon));
-
-
-        //Ore
-        go.ore.values.id = 1;
-        go.ore.values.name = L"Gira0";
-        oid_t ore0 = dtm->add_node(ORE, (void*)(&go.ore)); 
-
-        go.ore.values.id = 2;
-        go.ore.values.name = L"Gira1";
-        oid_t ore1 = dtm->add_node(ORE, (void*)(&go.ore)); 
-
-        //Belong
-        go.belong.values.prof = L"Miner";
-        dtm->add_edge(BELONG, (void*)(&go.belong), gnome0, mine0);
-
-        dtm->add_edge(BELONG, (void*)(&go.belong), gnome1, mine0);
-
-        go.belong.values.prof = L"Ruler";
-        dtm->add_edge(BELONG, (void*)(&go.belong), gnome2, mine0);
-
-        //Mines
-        dtm->add_edge(MINES, (void*)(&go.mines), ore0, mine0);
-        dtm->add_edge(MINES, (void*)(&go.mines), ore1, mine0);
-        // =================================================================
         Graph *g = dtm->get_graph();
 
         /*dtm->export_nodes_to_csv(GNOME, L"export/gnome.csv");
@@ -120,12 +52,10 @@ int main(int argc, char *argv[])
         
         Value *value = new Value();
 
-        dtm->remove_node(go.dragon.types.name, *value);
+        dtm->remove_node(DRAGON, go.dragon.types.name, value->SetString(L"Kondragon0"));
 
         delete value;
 
-        Objects *directedByWoody = g->Neighbors(mine0, go.belong.types.type, Any);
-        delete directedByWoody;
 /*
         // Get the cast of the movies directed by Woody Allen
         Objects *castDirectedByWoody = g->Neighbors(directedByWoody , go.cast.types.type , Any);
