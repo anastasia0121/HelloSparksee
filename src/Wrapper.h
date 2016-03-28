@@ -40,7 +40,8 @@ public:
  
     void remove_node(int16_t type, attr_t attr, Value value) const;
 
-    void move_node(int16_t type, attr_t attr, Value value) const;
+    void move_node(int16_t type, attr_t attr, Value &old_v,
+            Value &new_v) const;
 
     //see add node
     oid_t add_edge(int16_t type, void *info, oid_t left, oid_t right) const;

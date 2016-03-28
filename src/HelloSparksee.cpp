@@ -45,13 +45,12 @@ int main(int argc, char *argv[])
         // Get the movies directed by Woody Allen
         // */
         
-        Value *value = new Value();
+        Value old_v, new_v;
 
-        dtm->remove_node(DRAGON, go.dragon.types.name, value->SetString(L"Kondragon0"));
+        dtm->remove_node(DRAGON, go.dragon.types.name, old_v.SetString(L"Kondragon0"));
 
-        dtm->move_node(GNOME, go.gnome.types.name, value->SetString(L"Untilopulus0"));
-
-        delete value;
+        dtm->move_node(GNOME, go.gnome.types.name, 
+                old_v.SetString(L"Untilopulus0"), new_v.SetString(L"NewName"));
 
         // Export to graphviz
         ExportManager * expMngr = new MyExport();

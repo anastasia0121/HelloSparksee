@@ -432,15 +432,16 @@ void DataManager::remove_node(int16_t type, attr_t attr, Value value) const
     delete node;
 }
 
-void DataManager::move_node(int16_t type, attr_t attr, Value value) const
+void DataManager::move_node(int16_t type, attr_t attr, 
+        Value &old_v, Value &new_v) const
 {
-    Objects * objs = g->Select(attr, Equal, value);
+    Objects * objs = g->Select(attr, Equal, old_v);
     ObjectsIterator *it = objs->Iterator();
 
     while (it->HasNext())
     {
         oid_t node = it->Next();
-        g->SetAttribute(node, attr, value.SetString(L"NewName"));
+        g->SetAttribute(node, attr, new_v);
     }
 
     delete it;
@@ -449,7 +450,7 @@ void DataManager::move_node(int16_t type, attr_t attr, Value value) const
 
 void DataManager::garbage_generate(GraphObjects &go) const
 {
-    const size_t gnome_count = 2;
+    const size_t gnome_count = 20;
     const size_t mine_count = 1;
     const size_t dragon_count = 2;
     const size_t ore_count = 1;
