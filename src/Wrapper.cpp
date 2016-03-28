@@ -13,6 +13,8 @@
 #include "io/NodeTypeLoader.h"
 
 #include <array>
+#include <cstdlib>
+#include <stdlib.h>
 
 #include "MyExport.h"
 #include "Wrapper.h"
@@ -87,7 +89,7 @@ void DataManager::create_objects(GraphObjects &go) const
     go.belong.types.prof = g->NewAttribute(go.belong.types.type, L"Profession", String, Basic);
 
     //Mines
-    go.mines.types.type = g->NewRestrictedEdgeType(L"MINES", 
+    go.mines.types.type = g->NewRestrictedEdgeType(L"Mines", 
             go.ore.types.type, go.mine.types.type, false);
 }
 
@@ -469,7 +471,7 @@ void DataManager::garbage_generate(GraphObjects &go) const
     {
         //Gnome
         go.gnome.values.id = i;
-        go.gnome.values.name = L"Untilopulus0";
+        go.gnome.values.name = (L"Untilopulus" + std::to_wstring(i));
         go.gnome.values.age = 2003;
         go.gnome.values.str = 2003;
         go.gnome.values.intel = 2003;
@@ -481,11 +483,11 @@ void DataManager::garbage_generate(GraphObjects &go) const
         add_edge(BELONG, (void*)(&go.belong), gnome, mine[0]);
     }
 
-    for (int i = 0; i < gnome_count; ++i)
+    for (int i = 0; i < dragon_count; ++i)
     {
         //Dragon
         go.dragon.values.id = i;
-        go.dragon.values.name = L"Kondragon0";
+        go.dragon.values.name = (L"Kondragon" + std::to_wstring(i));
         go.dragon.values.age = 2003;
         go.dragon.values.color = 2003;
         go.dragon.values.size = 2003;
