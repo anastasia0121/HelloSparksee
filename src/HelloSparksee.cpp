@@ -38,11 +38,6 @@ int main(int argc, char *argv[])
         dtm->import_nodes_from_csv(MINE, L"export/mine.csv");
         dtm->import_nodes_from_csv(ORE, L"export/ore.csv");*/
 
-        // Export to graphviz
-        ExportManager * expMngr = new MyExport();
-        //ExportManager* x = static_cast<ExportManager*>(expMngr);
-        g->Export(L"test.dot", Graphviz, expMngr);
-        delete expMngr; 
 
         /*
         // =================================================================
@@ -54,8 +49,15 @@ int main(int argc, char *argv[])
 
         dtm->remove_node(DRAGON, go.dragon.types.name, value->SetString(L"Kondragon0"));
 
+        dtm->move_node(GNOME, go.gnome.types.name, value->SetString(L"Untilopulus0"));
+
         delete value;
 
+        // Export to graphviz
+        ExportManager * expMngr = new MyExport();
+        //ExportManager* x = static_cast<ExportManager*>(expMngr);
+        g->Export(L"test.dot", Graphviz, expMngr);
+        delete expMngr; 
 /*
         // Get the cast of the movies directed by Woody Allen
         Objects *castDirectedByWoody = g->Neighbors(directedByWoody , go.cast.types.type , Any);

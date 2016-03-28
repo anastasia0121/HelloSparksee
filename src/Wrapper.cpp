@@ -381,9 +381,9 @@ void DataManager::remove_node(int16_t type, attr_t attr, Value value) const
 {
     Objects * node = g->Select(attr, Equal, value);
 
-    ObjectsIterator *it = node->Iterator();
+//    ObjectsIterator *it = node->Iterator();
 
-    while (it->HasNext())
+//    while (it->HasNext())
     {
         switch(type)
         {
@@ -427,7 +427,7 @@ void DataManager::remove_node(int16_t type, attr_t attr, Value value) const
 
         }
     }
-    delete it;
+//    delete it;
     g->Drop(node);
     delete node;
 }
@@ -440,7 +440,7 @@ void DataManager::move_node(int16_t type, attr_t attr, Value value) const
     while (it->HasNext())
     {
         oid_t node = it->Next();
-        g->SetAttribute(node, attr, value);
+        g->SetAttribute(node, attr, value.SetString(L"NewName"));
     }
 
     delete it;
