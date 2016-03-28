@@ -90,7 +90,7 @@ void DataManager::create_objects(GraphObjects &go) const
 
     //Mines
     go.mines.types.type = g->NewRestrictedEdgeType(L"Mines", 
-            go.ore.types.type, go.mine.types.type, false);
+            go.mine.types.type, go.ore.types.type, false);
 }
 
 oid_t DataManager::add_node(int16_t type, void *info) const
@@ -508,6 +508,6 @@ void DataManager::garbage_generate(GraphObjects &go) const
         go.ore.values.name = L"Gira0";
         oid_t ore = add_node(ORE, (void*)(&go.ore)); 
         //Mines
-        add_edge(MINES, (void*)(&go.mines), ore, mine[0]);
+        add_edge(MINES, (void*)(&go.mines), mine[0], ore);
     }
 }
