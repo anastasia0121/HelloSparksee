@@ -75,6 +75,9 @@ public:
     DataManager (const DataManager &) = delete;
     DataManager & operator = (const DataManager &) = delete;
 
+    void switch_keyboard_layout(std::wstring &src, std::wstring &dst) const;
+//private:
+
 private:
      DataManager();
   

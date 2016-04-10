@@ -20,17 +20,15 @@ using namespace sparksee::io;
 #define EXPORT 0
 #define IMPORT 1
 
+#define TASK1 0
+#define TASK2 1
+
 int main(int argc, char *argv[]) 
 {
     try 
     {
+        setlocale(LC_ALL,"");
         const DataManager *dtm = DataManager::get_instanse();
-
-        std::wstring s;
-        std::wcin >> s;
-        std::wcout << s << std::endl;
-        std::wcout << L"work" << std::endl;
-
 
         GraphObjects go;
         dtm->create_objects(go);
@@ -45,10 +43,17 @@ int main(int argc, char *argv[])
         dtm->import_all();
 #endif
 #endif
-        //Value old_v, new_v;
-        //dtm->remove_node(DRAGON, go.dragon.types.name, old_v.SetString(L"Kondragon0"));
-        //dtm->move_node(GNOME, go.gnome.types.name, 
-        //        old_v.SetString(L"Untilopulus0"), new_v.SetString(L"NewName"));
+        
+#if TASK1
+        Value old_v, new_v;
+        dtm->remove_node(DRAGON, go.dragon.types.name, old_v.SetString(L"Kondragon0"));
+        dtm->change_node(go.gnome.types.name, 
+                old_v.SetString(L"Untilopulus0"), new_v.SetString(L"NewName"));
+#endif
+#if TASK2
+        Value v;
+        dtm->regexp_search(go.dragon.types.name, v.SetString(L"Ko"));
+#endif
 
         // Export to graphviz
         dtm->export_to_graphviz(); 
