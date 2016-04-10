@@ -53,6 +53,7 @@ int main(int argc, char *argv[])
 #if TASK2
         Value v;
         dtm->regexp_search(go.dragon.types.name, v.SetString(L"Ko"));
+        dtm->search(go.dragon.types.name, L"Лщтвкфпщт0");
 #endif
 
         // Export to graphviz

@@ -52,6 +52,10 @@ public:
     void garbage_generate(GraphObjects &go) const;
 
     void regexp_search(attr_t attr, Value &v) const;
+
+    void search(attr_t attr, const std::wstring &str) const;
+    
+    void search(attr_t attr, Value &v) const;
     
     // Export all nodes of given "type" to csv file named "file_name"
     void export_nodes_to_csv(int16_t type, const std::wstring &file_name) const;
@@ -75,7 +79,7 @@ public:
     DataManager (const DataManager &) = delete;
     DataManager & operator = (const DataManager &) = delete;
 
-    void switch_keyboard_layout(std::wstring &src, std::wstring &dst) const;
+    void switch_keyboard_layout(const std::wstring &src, std::wstring &dst) const;
 //private:
 
 private:

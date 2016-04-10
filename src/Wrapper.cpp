@@ -287,11 +287,65 @@ void DataManager::regexp_search(attr_t attr, Value &v) const
     {
         oid_t node = it->Next();
         g->GetAttribute(node, attr, v);
+        std::wcout << L"I find by regexp " << v.GetString() << std::endl;
+    }
+
+    delete it;
+    delete objs;
+}
+
+void DataManager::search(attr_t attr, Value &v) const
+{
+    Objects * objs = g->Select(attr, Equal, v);
+    ObjectsIterator *it = objs->Iterator();
+
+    while (it->HasNext())
+    {
+        oid_t node = it->Next();
+        g->GetAttribute(node, attr, v);
         std::wcout << L"I find " << v.GetString() << std::endl;
     }
 
     delete it;
     delete objs;
+}
+
+void DataManager::search(attr_t attr, const std::wstring &str) const
+{
+    Value v;
+
+    Objects * objs = g->Select(attr, Equal, v.SetString(str));
+    ObjectsIterator *it = objs->Iterator();
+
+    std::wstring dst;
+    if (!it->HasNext())
+    {
+        switch_keyboard_layout(str, dst);
+        Objects * another_objs = g->Select(attr, Equal, v.SetString(dst));
+        ObjectsIterator *another_it = another_objs->Iterator();
+
+        while (another_it->HasNext())
+        {
+            oid_t node = another_it->Next();
+            g->GetAttribute(node, attr, v);
+            std::wcout << L"I find " << v.GetString() << std::endl;
+        }
+
+        delete another_it;
+        delete another_objs;
+    }
+    else {
+        while (it->HasNext())
+        {
+            oid_t node = it->Next();
+            g->GetAttribute(node, attr, v);
+            std::wcout << L"I find " << v.GetString() << std::endl;
+        }
+
+    }
+
+    delete it;
+        delete objs;
 }
 
 void DataManager::garbage_generate(GraphObjects &go) const
