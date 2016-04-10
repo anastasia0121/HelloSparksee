@@ -11,6 +11,8 @@
 #include "io/CSVReader.h"
 #include "io/NodeTypeExporter.h"
 #include "io/NodeTypeLoader.h"
+#include "io/EdgeTypeExporter.h"
+#include "io/EdgeTypeLoader.h"
 
 #include <array>
 #include <cstdlib>
@@ -278,6 +280,73 @@ void DataManager::export_nodes_to_csv(int16_t type, const std::wstring &file_nam
     }
 }
 
+void DataManager::export_edges_to_csv(int16_t type, int16_t type_tail, int16_t type_head, const std::wstring &file_name) const
+{
+    if (g != NULL)
+    {
+        // Type of edge to export
+        type_t exportType;
+        // All attributes of type to export
+        AttributeList attrs;
+        
+        // configure CSV writer
+        CSVWriter csv;
+        csv.SetSeparator(L"|");
+        csv.SetAutoQuotes(true);
+        csv.Open(file_name);
+        
+        switch(type)
+        {
+            case BELONG: 
+                {
+                    exportType = g->FindType(L"Belong");
+                    attrs.Add(g->FindAttribute(exportType, L"Profession"));
+
+                    // If tail is a GNOME or a DRAGON
+                    switch(type_tail)
+                    {
+                        case GNOME: 
+                            {
+                                // 2 - head position in .csv file
+                                // 1 - tail position in .csv file
+                                EdgeTypeExporter ete(csv, *g, exportType, attrs, 2, 1, 
+                                        g->FindAttribute(g->FindType(L"Mine"), L"Id"), 
+                                            g->FindAttribute(g->FindType(L"Gnome"), L"Id"));
+                                ete.Run();
+                                break;
+                            }
+                        case DRAGON:
+                            {
+                                // 2 - head position in .csv file
+                                // 1 - tail position in .csv file
+                                EdgeTypeExporter ete(csv, *g, exportType, attrs, 2, 1, 
+                                        g->FindAttribute(g->FindType(L"Mine"), L"Id"), 
+                                            g->FindAttribute(g->FindType(L"Dragon"), L"Id"));
+                                ete.Run();
+                                break;
+                            }
+                    }
+                    break;
+                }
+            case MINES: 
+                {
+                    // Export all DRAGONSs to csv
+                    exportType = g->FindType(L"Mines");
+
+                    // 2 - head position in .csv file
+                    // 1 - tail position in .csv file
+                    EdgeTypeExporter ete(csv, *g, exportType, attrs, 2, 1, g->FindAttribute(g->FindType(L"Ore"), L"Id"), 
+                                g->FindAttribute(g->FindType(L"Mine"), L"Id"));
+                    ete.Run();
+                    break;
+                }
+        }
+
+        csv.Close();
+    }
+}
+
+
 void DataManager::import_nodes_from_csv(int16_t type, const std::wstring &file_name) const
 {
     if (g != NULL)
@@ -379,13 +448,84 @@ void DataManager::import_nodes_from_csv(int16_t type, const std::wstring &file_n
     }
 }
 
+void DataManager::import_edges_from_csv(int16_t type, int16_t type_tail, int16_t type_head, const std::wstring &file_name) const
+{
+    if (g != NULL)
+    {
+        // Type of edge to export
+        type_t importType;
+        // All attributes of type to export
+        AttributeList attrs;
+        
+        // configure CSV writer
+        CSVReader csv;
+        csv.SetSeparator(L"|");
+        csv.SetStartLine(0);
+        csv.Open(file_name);
+        
+        switch(type)
+        {
+            case BELONG: 
+                {
+                    importType = g->FindType(L"Belong");
+                    attrs.Add(g->FindAttribute(importType, L"Profession"));
+
+                    // If tail is a GNOME or a DRAGON
+                    switch(type_tail)
+                    {
+                        case GNOME: 
+                            {
+                                Int32List prof_pos;
+                                prof_pos.Add(0);
+                                // 2 - head position in .csv file
+                                // 1 - tail position in .csv file
+                                EdgeTypeLoader ete(csv, *g, importType, attrs, prof_pos, 2, 1, 
+                                        g->FindAttribute(g->FindType(L"Mine"), L"Id"), 
+                                            g->FindAttribute(g->FindType(L"Gnome"), L"Id"));
+                                ete.Run();
+                                break;
+                            }
+                        case DRAGON:
+                            {
+                                Int32List prof_pos;
+                                prof_pos.Add(0);
+                                // 2 - head position in .csv file
+                                // 1 - tail position in .csv file
+                                EdgeTypeLoader ete(csv, *g, importType, attrs, prof_pos, 2, 1, 
+                                        g->FindAttribute(g->FindType(L"Mine"), L"Id"), 
+                                            g->FindAttribute(g->FindType(L"Dragon"), L"Id"));
+                                ete.Run();
+                                break;
+                            }
+                    }
+                    break;
+                }
+            case MINES: 
+                {
+                    // Export all DRAGONSs to csv
+                    importType = g->FindType(L"Mines");
+
+                    Int32List attrs_pos;
+                    // 2 - head position in .csv file
+                    // 1 - tail position in .csv file
+                    EdgeTypeLoader ete(csv, *g, importType, attrs, attrs_pos, 2, 1, g->FindAttribute(g->FindType(L"Ore"), L"Id"), 
+                                g->FindAttribute(g->FindType(L"Mine"), L"Id"));
+                    ete.Run();
+                    break;
+                }
+        }
+
+        csv.Close();
+    }
+}
+
 void DataManager::remove_node(int16_t type, attr_t attr, Value value) const
 {
     Objects * node = g->Select(attr, Equal, value);
 
-//    ObjectsIterator *it = node->Iterator();
+    //    ObjectsIterator *it = node->Iterator();
 
-//    while (it->HasNext())
+    //    while (it->HasNext())
     {
         switch(type)
         {
@@ -429,7 +569,7 @@ void DataManager::remove_node(int16_t type, attr_t attr, Value value) const
 
         }
     }
-//    delete it;
+    //    delete it;
     g->Drop(node);
     delete node;
 }

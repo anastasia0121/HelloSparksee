@@ -51,9 +51,15 @@ public:
     // Export all nodes of given "type" to csv file named "file_name"
     void export_nodes_to_csv(int16_t type, const std::wstring &file_name) const;
     
+    // Export all edges of given "type" to csv file named "file_name"
+    void export_edges_to_csv(int16_t type, int16_t type_tail, int16_t type_head, const std::wstring &file_name) const;
+
     // Import all nodes of given "type" from csv file named "file_name"
     void import_nodes_from_csv(int16_t type, const std::wstring &file_name) const;
-   
+
+    // Import all edges of given "type" from csv file named "file_name"
+    void import_edges_from_csv(int16_t type, int16_t type_tail, int16_t type_head, const std::wstring &file_name) const;
+
     ~DataManager();
             
     //May be we should forbid move constructor and operator
