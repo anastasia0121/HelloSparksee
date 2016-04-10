@@ -27,6 +27,9 @@ public:
         return g;
     }
 
+    // Export to graphviz
+    void export_to_graphviz() const;
+
     //create all objects (after called this method
     //graph can add object tis type)
     void create_objects(GraphObjects &go) const;
@@ -38,9 +41,9 @@ public:
     //info - struct which contain type and attributes of object
     oid_t add_node(int16_t type, void *info) const;
  
-    void remove_node(int16_t type, attr_t attr, Value value) const;
+    void remove_node(int16_t type, attr_t attr, Value &value) const;
 
-    void move_node(int16_t type, attr_t attr, Value &old_v,
+    void change_node(attr_t attr, Value &old_v,
             Value &new_v) const;
 
     //see add node
@@ -48,6 +51,8 @@ public:
     
     void garbage_generate(GraphObjects &go) const;
 
+    void regexp_search(attr_t attr, Value &v) const;
+    
     // Export all nodes of given "type" to csv file named "file_name"
     void export_nodes_to_csv(int16_t type, const std::wstring &file_name) const;
     
@@ -59,6 +64,9 @@ public:
 
     // Import all edges of given "type" from csv file named "file_name"
     void import_edges_from_csv(int16_t type, int16_t type_tail, int16_t type_head, const std::wstring &file_name) const;
+
+    void export_all() const;
+    void import_all() const;
 
     ~DataManager();
             

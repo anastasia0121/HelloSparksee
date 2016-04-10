@@ -52,6 +52,13 @@ const DataManager * DataManager::get_instanse()
     return &dm;
 }
 
+void DataManager::export_to_graphviz() const
+{
+    ExportManager * expMngr = new MyExport();
+    g->Export(L"test.dot", Graphviz, expMngr);
+    delete expMngr; 
+}
+
 void DataManager::create_objects(GraphObjects &go) const
 {
     //Gnome
@@ -519,7 +526,34 @@ void DataManager::import_edges_from_csv(int16_t type, int16_t type_tail, int16_t
     }
 }
 
-void DataManager::remove_node(int16_t type, attr_t attr, Value value) const
+void DataManager::import_all() const
+{
+    // IMPORT NODES FROM CSV
+    import_nodes_from_csv(GNOME, L"export/gnome.csv");
+    import_nodes_from_csv(DRAGON, L"export/dragon.csv");
+    import_nodes_from_csv(MINE, L"export/mine.csv");
+    import_nodes_from_csv(ORE, L"export/ore.csv");
+
+    // IMPORT EDGES FROM CSV
+    import_edges_from_csv(BELONG, GNOME, MINE, L"export/belong_gnome.csv");
+    import_edges_from_csv(BELONG, DRAGON, MINE, L"export/belong_dragon.csv");
+    import_edges_from_csv(MINES, GNOME, MINE, L"export/mines.csv");
+}
+
+void DataManager::export_all() const
+{
+    // EXPORT NODES TO CSV
+    export_nodes_to_csv(GNOME, L"export/gnome.csv");
+    export_nodes_to_csv(DRAGON, L"export/dragon.csv");
+    export_nodes_to_csv(MINE, L"export/mine.csv");
+    export_nodes_to_csv(ORE, L"export/ore.csv");
+    // EXPORT EDGES TO CSV
+    export_edges_to_csv(BELONG, GNOME, MINE, L"export/belong_gnome.csv");
+    export_edges_to_csv(BELONG, DRAGON, MINE, L"export/belong_dragon.csv");
+    export_edges_to_csv(MINES, GNOME, MINE, L"export/mines.csv");
+}
+
+void DataManager::remove_node(int16_t type, attr_t attr, Value &value) const
 {
     Objects * node = g->Select(attr, Equal, value);
 
@@ -574,7 +608,7 @@ void DataManager::remove_node(int16_t type, attr_t attr, Value value) const
     delete node;
 }
 
-void DataManager::move_node(int16_t type, attr_t attr, 
+void DataManager::change_node(attr_t attr, 
         Value &old_v, Value &new_v) const
 {
     Objects * objs = g->Select(attr, Equal, old_v);
@@ -584,6 +618,22 @@ void DataManager::move_node(int16_t type, attr_t attr,
     {
         oid_t node = it->Next();
         g->SetAttribute(node, attr, new_v);
+    }
+
+    delete it;
+    delete objs;
+}
+
+void DataManager::regexp_search(attr_t attr, Value &v) const
+{
+    Objects * objs = g->Select(attr, RegExp, v);
+    ObjectsIterator *it = objs->Iterator();
+
+    while (it->HasNext())
+    {
+        oid_t node = it->Next();
+        g->GetAttribute(node, attr, v);
+        std::wcout << L"I find " << v.GetString() << std::endl;
     }
 
     delete it;
