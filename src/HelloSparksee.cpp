@@ -26,6 +26,12 @@ int main(int argc, char *argv[])
     {
         const DataManager *dtm = DataManager::get_instanse();
 
+        std::wstring s;
+        std::wcin >> s;
+        std::wcout << s << std::endl;
+        std::wcout << L"work" << std::endl;
+
+
         GraphObjects go;
         dtm->create_objects(go);
 
