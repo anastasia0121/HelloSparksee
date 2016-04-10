@@ -27,5 +27,12 @@
 *.out
 *.app
 
+#sparksee files
+*.gdb
+*.log
+*.ps
+*.dot
+*.csv
+
 # Vim swap
 *.un~
