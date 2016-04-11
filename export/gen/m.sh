@@ -1,10 +1,10 @@
 #!/bin/bash
 
-max_ore=$( ./dr.sh | wc -l )
-max_mine=$( ./mine.sh | wc -l )
+max_ore=$( wc -l ../dragon.csv )
+max_mine=$( wc -l ../mine.csv )
 
 #|0|0
-for((i=0;$i<10;i++));
+for((i=0;$i<1000000;i++));
 do
     echo -n "|"
     echo -n "$(( $RANDOM % $max_mine ))|"
