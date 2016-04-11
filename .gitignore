@@ -32,7 +32,6 @@
 *.log
 *.ps
 *.dot
-*.csv
 
 # Vim swap
 *.un~
