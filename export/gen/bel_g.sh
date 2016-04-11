@@ -1,7 +1,7 @@
 #!/bin/bash
 
-max_g=$( wc -l ../gnome.csv )
-max_mine=$( wc -l ../mine.csv )
+max_g=$( wc -l ../gnome.csv | cut -f1 -d' ' )
+max_mine=$( wc -l ../mine.csv | cut -f1 -d' ' )
 
 #Miner|0|0
 for((i=0;$i<1000000;i++));
