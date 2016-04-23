@@ -17,8 +17,10 @@ debug:
 	g++ -I../sparkseecpp-5.2.2_cpp11/includes/sparksee -L../sparkseecpp-5.2.2_cpp11/lib/linux64 $(SRC) -o HelloSparksee -std=c++11 -lsparksee -lpthread -g2
 
 tests:
-	g++ -I$(HEADER) -I./src -L$(LIB) $(TSTSRC) -o HelloSparkseeTestik -std=c++11 -lsparksee -lpthread
+	g++ -I$(HEADER) -I./src -L$(LIB) $(TSTSRC) -o Testik -std=c++11 -lsparksee -lpthread
 
+perf:
+	g++ test/perf/*.cpp -std=c++11 -o Perf
 
 clean:
 	rm -rf *.gdb *.log *.o
