@@ -1,29 +1,7 @@
 #include <iostream> 
-
-#include "gdb/Sparksee.h"
-#include "gdb/Database.h"
-#include "gdb/Session.h"
-#include "gdb/Graph.h"
-#include "gdb/Export.h"
-#include "gdb/Objects.h"
-#include "gdb/ObjectsIterator.h"
-#include "io/CSVWriter.h"
-#include "io/CSVReader.h"
-#include "io/NodeTypeExporter.h"
-#include "io/NodeTypeLoader.h"
-#include "io/EdgeTypeExporter.h"
-#include "io/EdgeTypeLoader.h"
-
-#include <array>
 #include <cstdlib>
 #include <stdlib.h>
-
-#include "MyExport.h"
 #include "Wrapper.h"
-#include "Type.h"
-
-using namespace sparksee::gdb;
-using namespace sparksee::io;
 
 void DataManager::switch_keyboard_layout(const std::wstring &src, std::wstring &dst) const
 {

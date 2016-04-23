@@ -32,6 +32,7 @@ DataManager::DataManager()
     cfg.SetRecoveryEnabled(true);
     sparksee = new Sparksee(cfg);
     db = sparksee->Create(L"HelloSparksee.gdb", L"HelloSparksee");
+//    db = sparksee->Open(L"HelloSparksee.gdb", L"HelloSparksee");
 
     // Create a new session of working with database
     sess = db->NewSession();
@@ -345,7 +346,7 @@ void DataManager::search(attr_t attr, const std::wstring &str) const
     }
 
     delete it;
-        delete objs;
+    delete objs;
 }
 
 void DataManager::garbage_generate(GraphObjects &go) const
