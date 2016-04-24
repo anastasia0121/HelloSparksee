@@ -14,6 +14,9 @@
 #include "io/EdgeTypeExporter.h"
 #include "io/EdgeTypeLoader.h"
 
+#include "algorithms/TraversalBFS.h"
+#include "algorithms/TraversalDFS.h"
+
 #include <array>
 #include <cstdlib>
 #include <stdlib.h>
@@ -24,6 +27,7 @@
 
 using namespace sparksee::gdb;
 using namespace sparksee::io;
+using namespace sparksee::algorithms;
 
 DataManager::DataManager()
 {
@@ -32,7 +36,7 @@ DataManager::DataManager()
     cfg.SetRecoveryEnabled(true);
     sparksee = new Sparksee(cfg);
     db = sparksee->Create(L"HelloSparksee.gdb", L"HelloSparksee");
-//    db = sparksee->Open(L"HelloSparksee.gdb", L"HelloSparksee");
+//    db = sparksee->Open(L"HelloSparksee.gdb", false);
 
     // Create a new session of working with database
     sess = db->NewSession();
@@ -295,20 +299,23 @@ void DataManager::regexp_search(attr_t attr, Value &v) const
     delete objs;
 }
 
-void DataManager::search(attr_t attr, Value &v) const
+oid_t DataManager::search(attr_t attr, Value &v) const
 {
     Objects * objs = g->Select(attr, Equal, v);
     ObjectsIterator *it = objs->Iterator();
 
+    oid_t node;
     while (it->HasNext())
     {
-        oid_t node = it->Next();
+        node = it->Next();
         g->GetAttribute(node, attr, v);
-        std::wcout << L"I find " << v.GetString() << std::endl;
+        std::wcout << L"I find1 " << v.GetString() << " " <<  node << std::endl;
     }
 
     delete it;
     delete objs;
+
+    return node;
 }
 
 void DataManager::search(attr_t attr, const std::wstring &str) const
@@ -408,5 +415,31 @@ void DataManager::garbage_generate(GraphObjects &go) const
         oid_t ore = add_node(ORE, (void*)(&go.ore)); 
         //Mines
         add_edge(MINES, (void*)(&go.mines), mine[0], ore);
+    }
+}
+
+void DataManager::dfs (oid_t src, const std::wstring & str, int max_hops) const
+{
+    TraversalDFS dfs(*sess, src);
+    dfs.AddAllEdgeTypes(Outgoing);
+    dfs.AddNodeType(g->FindType(str));
+    dfs.SetMaximumHops(max_hops);
+    while (dfs.HasNext()) 
+    {
+        std::wcout << L"Current node " << dfs.Next()
+            << L" at depth " << dfs.GetCurrentDepth() << std::endl;
+    }
+}
+
+void DataManager::bfs (oid_t src, const std::wstring & str, int max_hops) const
+{
+    TraversalBFS bfs(*sess, src);
+    bfs.AddAllEdgeTypes(Any);
+    bfs.AddNodeType(g->FindType(str));
+    bfs.SetMaximumHops(max_hops);
+    while (bfs.HasNext()) 
+    {
+        std::wcout << L"Current node " << bfs.Next()
+            << L" at depth " << bfs.GetCurrentDepth() << std::endl;
     }
 }

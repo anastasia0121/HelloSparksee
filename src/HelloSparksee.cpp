@@ -21,7 +21,8 @@ using namespace sparksee::io;
 #define IMPORT 1
 
 #define TASK1 0
-#define TASK2 1
+#define TASK2 0
+#define TASK3 1
 
 int main(int argc, char *argv[]) 
 {
@@ -35,13 +36,12 @@ int main(int argc, char *argv[])
 
 #if GARBAGE
         dtm->garbage_generate(go);
-#else
+#endif
 #if EXPORT
         dtm->export_all();
 #endif
 #if IMPORT
         dtm->import_all();
-#endif
 #endif
         
 #if TASK1
@@ -55,11 +55,18 @@ int main(int argc, char *argv[])
         dtm->regexp_search(go.dragon.types.name, v.SetString(L"Ko"));
         dtm->search(go.dragon.types.name, L"Лщтвкфпщт0");
 #endif
+#if TASK3
+        Value v;
+        oid_t node = dtm->search(go.mine.types.name, v.SetString(L"Arhopolis"));
+        dtm->bfs(node, L"Ore" , 30); 
+        dtm->dfs(node, L"Ore" , 30); 
+#endif
 
         // Export to graphviz
         dtm->export_to_graphviz(); 
     }
-    catch (Exception& e) {
+    catch (Exception& e)
+    {
         std::cerr << e.Message() << std::endl;
     }
     return 0;

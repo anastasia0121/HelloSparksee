@@ -22,11 +22,6 @@ using namespace sparksee::io;
 class DataManager
 {
 public:
-    Graph * get_graph() const
-    {
-        return g;
-    }
-
     // Export to graphviz
     void export_to_graphviz() const;
 
@@ -55,7 +50,7 @@ public:
 
     void search(attr_t attr, const std::wstring &str) const;
     
-    void search(attr_t attr, Value &v) const;
+    oid_t search(attr_t attr, Value &v) const;
     
     // Export all nodes of given "type" to csv file named "file_name"
     void export_nodes_to_csv(int16_t type, const std::wstring &file_name) const;
@@ -71,6 +66,10 @@ public:
 
     void export_all() const;
     void import_all() const;
+
+    // Algorithms
+    void dfs (oid_t src, const std::wstring & str, int max_hops) const;
+    void bfs (oid_t src, const std::wstring & str, int max_hops) const;
 
     ~DataManager();
             
