@@ -1,7 +1,7 @@
 #!/bin/bash
 
 #0|Kondragon0|2003|2003|2003|2003|2003|2003|Brilliant
-for((i=0;$i<1000000;i++));
+for((i=0;$i<10000;i++));
 do
     echo -n "${i}|"
     echo -n $( sed -n "$(( $RANDOM % 280 + 1))p" name )"|" 
