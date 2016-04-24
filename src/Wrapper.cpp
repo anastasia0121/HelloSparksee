@@ -7,6 +7,7 @@
 #include "gdb/Export.h"
 #include "gdb/Objects.h"
 #include "gdb/ObjectsIterator.h"
+#include "gdb/Graph_data.h"
 #include "io/CSVWriter.h"
 #include "io/CSVReader.h"
 #include "io/NodeTypeExporter.h"
@@ -35,8 +36,14 @@ DataManager::DataManager()
     SparkseeConfig cfg;
     cfg.SetRecoveryEnabled(true);
     sparksee = new Sparksee(cfg);
-    db = sparksee->Create(L"HelloSparksee.gdb", L"HelloSparksee");
-//    db = sparksee->Open(L"HelloSparksee.gdb", false);
+    try 
+    {
+        db = sparksee->Open(L"HelloSparksee.gdb", false);
+    }
+    catch(FileNotFoundException &exc) 
+    {
+        db = sparksee->Create(L"HelloSparksee.gdb", L"HelloSparksee");
+    }
 
     // Create a new session of working with database
     sess = db->NewSession();
@@ -60,44 +67,119 @@ const DataManager * DataManager::get_instanse()
 void DataManager::create_objects(GraphObjects &go) const
 {
     //Gnome
-    go.gnome.types.type  = g->NewNodeType(L"Gnome");
-    go.gnome.types.id    = g->NewAttribute(go.gnome.types.type, L"Id",        Long,    Unique);
-    go.gnome.types.name  = g->NewAttribute(go.gnome.types.type, L"Name",      String,  Indexed);
-    go.gnome.types.age   = g->NewAttribute(go.gnome.types.type, L"Age",       Integer, Indexed);
-    go.gnome.types.str   = g->NewAttribute(go.gnome.types.type, L"Strength",  Integer, Indexed);
-    go.gnome.types.intel = g->NewAttribute(go.gnome.types.type, L"Intelligence", Integer, Indexed);
-    go.gnome.types.cha   = g->NewAttribute(go.gnome.types.type, L"Charisma",  Integer, Indexed);
-    go.gnome.types.skill = g->NewAttribute(go.gnome.types.type, L"Skills",    String,  Indexed);
+    go.gnome.types.type = g->FindType(L"Gnome");
+    if (go.gnome.types.type == Type::InvalidType) 
+        go.gnome.types.type = g->NewNodeType(L"Gnome");
+
+    go.gnome.types.id = g->FindAttribute(go.gnome.types.type, L"Id");
+    if (go.gnome.types.id == Attribute::InvalidAttribute)
+        go.gnome.types.id = g->NewAttribute(go.gnome.types.type, L"Id", Long, Unique);
+
+    go.gnome.types.name = g->FindAttribute(go.gnome.types.type, L"Name");
+    if (go.gnome.types.name == Attribute::InvalidAttribute)
+        go.gnome.types.name = g->NewAttribute(go.gnome.types.type, L"Name", String, Indexed);
+
+    go.gnome.types.age = g->FindAttribute(go.gnome.types.type, L"Age");
+    if (go.gnome.types.age == Attribute::InvalidAttribute)
+        go.gnome.types.age = g->NewAttribute(go.gnome.types.type, L"Age", Integer, Indexed);
+
+    go.gnome.types.str = g->FindAttribute(go.gnome.types.type, L"Strength");
+    if (go.gnome.types.str == Attribute::InvalidAttribute)
+        go.gnome.types.str = g->NewAttribute(go.gnome.types.type, L"Strength",Integer, Indexed);
+
+    go.gnome.types.intel = g->FindAttribute(go.gnome.types.type, L"Intelligence");
+    if (go.gnome.types.intel == Attribute::InvalidAttribute)
+        go.gnome.types.intel = g->NewAttribute(go.gnome.types.type, L"Intelligence", Integer, Indexed);
+
+    go.gnome.types.cha = g->FindAttribute(go.gnome.types.type, L"Charisma");
+    if (go.gnome.types.cha == Attribute::InvalidAttribute)
+        go.gnome.types.cha = g->NewAttribute(go.gnome.types.type, L"Charisma", Integer, Indexed);
+
+    go.gnome.types.skill = g->FindAttribute(go.gnome.types.type, L"Skills");
+    if (go.gnome.types.skill == Attribute::InvalidAttribute)
+        go.gnome.types.skill = g->NewAttribute(go.gnome.types.type, L"Skills", String, Indexed);
 
     //Mine
-    go.mine.types.type = g->NewNodeType(L"Mine");
-    go.mine.types.id   = g->NewAttribute(go.mine.types.type , L"Id",   Long,   Unique);
-    go.mine.types.name = g->NewAttribute(go.mine.types.type , L"Name", String, Indexed);
+    go.mine.types.type = g->FindType(L"Mine");
+    if (go.mine.types.type == Type::InvalidType) 
+        go.mine.types.type = g->NewNodeType(L"Mine");
+
+    go.mine.types.id = g->FindAttribute(go.mine.types.type, L"Id");
+    if (go.mine.types.id == Attribute::InvalidAttribute)
+        go.mine.types.id = g->NewAttribute(go.mine.types.type , L"Id", Long, Unique);
+
+    go.mine.types.name = g->FindAttribute(go.mine.types.type, L"Name");
+    if (go.mine.types.name == Attribute::InvalidAttribute)
+        go.mine.types.name = g->NewAttribute(go.mine.types.type, L"Name", String, Indexed);
 
     //Dragon
-    go.dragon.types.type  = g->NewNodeType(L"Dragon");
-    go.dragon.types.id    = g->NewAttribute(go.dragon.types.type, L"Id",        Long,    Unique);
-    go.dragon.types.name  = g->NewAttribute(go.dragon.types.type, L"Name",      String,  Indexed);
-    go.dragon.types.color = g->NewAttribute(go.dragon.types.type, L"Color",     Integer, Indexed);
-    go.dragon.types.cost  = g->NewAttribute(go.dragon.types.type, L"Cost",      Integer, Indexed);
-    go.dragon.types.size  = g->NewAttribute(go.dragon.types.type, L"Size",      Integer, Indexed);
-    go.dragon.types.age   = g->NewAttribute(go.dragon.types.type, L"Age",       Integer, Indexed);
-    go.dragon.types.str   = g->NewAttribute(go.dragon.types.type, L"Strength",  Integer, Indexed);
-    go.dragon.types.cha   = g->NewAttribute(go.dragon.types.type, L"Charisma",  Integer, Indexed);
-    go.dragon.types.skill = g->NewAttribute(go.dragon.types.type, L"Skills",    String,  Indexed);
+    go.dragon.types.type = g->FindType(L"Dragon");
+    if (go.dragon.types.type == Type::InvalidType) 
+        go.dragon.types.type  = g->NewNodeType(L"Dragon");
+
+    go.dragon.types.id    = g->FindAttribute(go.dragon.types.type, L"Id");
+    if (go.dragon.types.id == Attribute::InvalidAttribute)
+        go.dragon.types.id    = g->NewAttribute(go.dragon.types.type, L"Id",        Long,    Unique);
+
+    go.dragon.types.name  = g->FindAttribute(go.dragon.types.type, L"Name");
+    if (go.dragon.types.name == Attribute::InvalidAttribute)
+        go.dragon.types.name  = g->NewAttribute(go.dragon.types.type, L"Name",      String,  Indexed);
+
+    go.dragon.types.color = g->FindAttribute(go.dragon.types.type, L"Color");
+    if (go.dragon.types.color == Attribute::InvalidAttribute)
+        go.dragon.types.color = g->NewAttribute(go.dragon.types.type, L"Color",     Integer, Indexed);
+
+    go.dragon.types.cost  = g->FindAttribute(go.dragon.types.type, L"Cost");
+    if (go.dragon.types.cost == Attribute::InvalidAttribute)
+        go.dragon.types.cost  = g->NewAttribute(go.dragon.types.type, L"Cost",      Integer, Indexed);
+
+    go.dragon.types.size  = g->FindAttribute(go.dragon.types.type, L"Size");
+    if (go.dragon.types.size == Attribute::InvalidAttribute)
+        go.dragon.types.size  = g->NewAttribute(go.dragon.types.type, L"Size",      Integer, Indexed);
+
+    go.dragon.types.age   = g->FindAttribute(go.dragon.types.type, L"Age");
+    if (go.dragon.types.age == Attribute::InvalidAttribute)
+        go.dragon.types.age   = g->NewAttribute(go.dragon.types.type, L"Age",       Integer, Indexed);
+
+    go.dragon.types.str   = g->FindAttribute(go.dragon.types.type, L"Strength");
+    if (go.dragon.types.str == Attribute::InvalidAttribute)
+        go.dragon.types.str   = g->NewAttribute(go.dragon.types.type, L"Strength",  Integer, Indexed);
+
+    go.dragon.types.cha   = g->FindAttribute(go.dragon.types.type, L"Charisma");
+    if (go.dragon.types.cha == Attribute::InvalidAttribute)
+        go.dragon.types.cha   = g->NewAttribute(go.dragon.types.type, L"Charisma",  Integer, Indexed);
+
+    go.dragon.types.skill = g->FindAttribute(go.dragon.types.type, L"Skills");
+    if (go.dragon.types.skill == Attribute::InvalidAttribute)
+        go.dragon.types.skill = g->NewAttribute(go.dragon.types.type, L"Skills",    String,  Indexed);
 
     //Ore
-    go.ore.types.type = g->NewNodeType(L"Ore");
-    go.ore.types.id   = g->NewAttribute(go.ore.types.type , L"Id",   Long,   Unique);
-    go.ore.types.name = g->NewAttribute(go.ore.types.type , L"Name", String, Indexed);
+    go.ore.types.type = g->FindType(L"Ore");
+    if (go.ore.types.type == Type::InvalidType) 
+        go.ore.types.type = g->NewNodeType(L"Ore");
+
+    go.ore.types.id = g->FindAttribute(go.ore.types.type, L"Id");
+    if (go.ore.types.id == Attribute::InvalidAttribute)
+        go.ore.types.id   = g->NewAttribute(go.ore.types.type , L"Id",   Long,   Unique);
+
+    go.ore.types.name = g->FindAttribute(go.ore.types.type, L"Name");
+    if (go.ore.types.name == Attribute::InvalidAttribute)
+        go.ore.types.name = g->NewAttribute(go.ore.types.type , L"Name", String, Indexed);
 
     //Belong 
-    go.belong.types.type = g->NewEdgeType(L"Belong", false , false); //not ore TODO
-    go.belong.types.prof = g->NewAttribute(go.belong.types.type, L"Profession", String, Basic);
+    go.belong.types.type = g->FindType(L"Belong");
+    if (go.belong.types.type == Type::InvalidType) 
+        go.belong.types.type = g->NewEdgeType(L"Belong", false , false); //not ore TODO
+
+    go.belong.types.prof = g->FindAttribute(go.belong.types.type, L"Profession");
+    if (go.belong.types.prof == Attribute::InvalidAttribute)
+        go.belong.types.prof = g->NewAttribute(go.belong.types.type, L"Profession", String, Basic);
 
     //Mines
-    go.mines.types.type = g->NewRestrictedEdgeType(L"Mines", 
-            go.mine.types.type, go.ore.types.type, false);
+    go.mines.types.type = g->FindType(L"Mines");
+    if (go.mines.types.type == Type::InvalidType) 
+        go.mines.types.type = g->NewRestrictedEdgeType(L"Mines", 
+                go.mine.types.type, go.ore.types.type, false);
 }
 
 oid_t DataManager::add_node(int16_t type, void *info) const
