@@ -8,7 +8,7 @@ HEADER="../sparkseecpp-5.2.2_cpp11/includes/sparksee"
 LIB="../sparkseecpp-5.2.2_cpp11/lib/linux64"
 
 all:
-	g++ -I$(HEADER) -L$(LIB) $(SRC) -o HelloSparksee -std=c++11 -lsparksee -lpthread
+	g++ -O3 -I$(HEADER) -L$(LIB) $(SRC) -o HelloSparksee -std=c++11 -lsparksee -lpthread
 
 graph:
 	dot test.dot -Tps -o hello.ps

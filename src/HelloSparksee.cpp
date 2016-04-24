@@ -12,13 +12,14 @@
 #include "Type.h"
 #include "MyExport.h"
 #include "Wrapper.h"
+#include "Timer.h"
 
 using namespace sparksee::gdb;
 using namespace sparksee::io;
 
-#define GARBAGE 0
+#define GARBAGE 1
 #define EXPORT 0
-#define IMPORT 1
+#define IMPORT 0
 
 #define TASK1 0
 #define TASK2 0
@@ -58,7 +59,14 @@ int main(int argc, char *argv[])
 #if TASK3
         Value v;
         oid_t node = dtm->search(go.mine.types.name, v.SetString(L"Arhopolis"));
+        
+        uint64_t rate = timer::init_rate();
+        uint64_t t1 = timer::rdtsc();
         dtm->bfs(node, L"Ore" , 30); 
+        uint64_t t2 = timer::rdtsc();
+
+        std::wcout << timer::to_msec(t2 - t1, rate) << std::endl;
+
         dtm->dfs(node, L"Ore" , 30); 
 #endif
 
