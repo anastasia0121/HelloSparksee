@@ -71,6 +71,8 @@ public:
     void dfs (oid_t src, const std::wstring & str, int max_hops) const;
     void bfs (oid_t src, const std::wstring & str, int max_hops) const;
 
+    void context (oid_t src, const std::wstring & str, int max_hops) const;
+
     ~DataManager();
             
     //May be we should forbid move constructor and operator

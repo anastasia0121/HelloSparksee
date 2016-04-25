@@ -17,13 +17,13 @@
 using namespace sparksee::gdb;
 using namespace sparksee::io;
 
-#define GARBAGE 1
+#define GARBAGE 0
 #define EXPORT 0
-#define IMPORT 0
+#define IMPORT 1
 
 #define TASK1 0
 #define TASK2 0
-#define TASK3 1
+#define TASK3 3
 
 int main(int argc, char *argv[]) 
 {
@@ -68,6 +68,7 @@ int main(int argc, char *argv[])
         std::wcout << timer::to_msec(t2 - t1, rate) << std::endl;
 
         dtm->dfs(node, L"Ore" , 30); 
+        dtm->context(node, L"Ore" , 30); 
 #endif
 
         // Export to graphviz

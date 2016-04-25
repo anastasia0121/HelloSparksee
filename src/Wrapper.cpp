@@ -15,6 +15,7 @@
 #include "io/EdgeTypeExporter.h"
 #include "io/EdgeTypeLoader.h"
 
+#include "algorithms/Context.h"
 #include "algorithms/TraversalBFS.h"
 #include "algorithms/TraversalDFS.h"
 
@@ -524,4 +525,24 @@ void DataManager::bfs (oid_t src, const std::wstring & str, int max_hops) const
         std::wcout << L"Current node " << bfs.Next()
             << L" at depth " << bfs.GetCurrentDepth() << std::endl;
     }
+}
+
+void DataManager::context (oid_t src, const std::wstring & str, int max_hops) const
+{
+    Context ctx(*sess, src);
+    ctx.AddAllEdgeTypes(Any);
+    ctx.AddNodeType(g->FindType(str));
+    ctx.SetMaximumHops(max_hops, true);
+    Objects * objs = ctx.Compute();
+    ObjectsIterator *it = objs->Iterator();
+
+    oid_t node;
+    while (it->HasNext())
+    {
+        node = it->Next();
+        std::wcout << L"Context " << node << std::endl;
+    }
+
+    delete it;
+    delete objs;
 }
