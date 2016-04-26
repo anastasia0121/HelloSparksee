@@ -1,21 +1,9 @@
 # HelloSparksee
-База данных отображает функционирование шахты по добыче руды. 
+Database reflects functioning of mines that mine ore.
 
-Объекты: шахты, гномы, драконы, руда. 
+Every mine has its gnomes, that mine ore, and dragons to melt it.
 
-Шахта имеет руду или руды, которые она обрабатывает. 
+Every gnome and dragon have their own skills and characteristics. 
 
-Гном имеет собственные характеристические свойства и связан с шахтой. 
-
-Связи: 
-Гном - Шахты: принадлежит (с атрибутом “профессия”)
-    Профессии:
-    Шахтер
-    Алхимик
-    Плавильщик
-    Кузнец
-    Надсмотрщик
-    Правитель
-Дракон - Шахта: принадлежит (с атрибутом профессии=”дракон”)
-Шахта - Руда: добывает
-
+Objects: mine, gnome, dragon, ore.
+Relations: gnome BELONGS to mine, dragon BELONGS to mine, mine MINES ore.
