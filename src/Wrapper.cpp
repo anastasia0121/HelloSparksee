@@ -352,7 +352,7 @@ void DataManager::remove_node(int16_t type, attr_t attr, Value &value) const
 void DataManager::change_node(attr_t attr, 
         Value &old_v, Value &new_v) const
 {
-    Objects * objs = g->Select(attr, Equal, old_v);
+    Objects * objs = g->Select(attr, RegExp, old_v);
     ObjectsIterator *it = objs->Iterator();
 
     while (it->HasNext())
@@ -374,7 +374,6 @@ void DataManager::regexp_search(attr_t attr, Value &v) const
     {
         oid_t node = it->Next();
         g->GetAttribute(node, attr, v);
-        std::wcout << L"I find by regexp " << v.GetString() << std::endl;
     }
 
     delete it;
@@ -440,26 +439,29 @@ void DataManager::search(attr_t attr, const std::wstring &str) const
 
 void DataManager::garbage_generate(GraphObjects &go) const
 {
-    const size_t gnome_count = 20;
-    const size_t mine_count = 1;
-    const size_t dragon_count = 2;
-    const size_t ore_count = 1;
+    const size_t gnome_count = 800000;
+    const size_t mine_count = 1000;
+    const size_t dragon_count = 200000;
+    const size_t ore_count = 10;
 
     std::array<oid_t, mine_count> mine;
+    std::array<oid_t, ore_count> ore;
 
     for (int i = 0; i < mine_count; ++i)
     {
         //Mine
-        go.mine.values.id = i;
-        go.mine.values.name = L"Arhopolis";
+        go.mine.values.id = i+1;
+        go.mine.values.name = L"Arhopolis" + std::to_wstring(i);
         mine[i] = add_node(MINE, (void*)(&go.mine)); 
     }
-
-    for (int i = 0; i < gnome_count; ++i)
+    
+    for (int i = 0; i < 1000; ++i)
+    {
+    for (int j = 0; j < 800; ++j)
     {
         //Gnome
-        go.gnome.values.id = i;
-        go.gnome.values.name = (L"Untilopulus" + std::to_wstring(i));
+        go.gnome.values.id = i*800+(j+1);
+        go.gnome.values.name = (L"Untilopulus" + std::to_wstring(i*800+j+1));
         go.gnome.values.age = 2003;
         go.gnome.values.str = 2003;
         go.gnome.values.intel = 2003;
@@ -468,14 +470,17 @@ void DataManager::garbage_generate(GraphObjects &go) const
         oid_t gnome = add_node(GNOME, (void*)(&go.gnome));
         //Belong
         go.belong.values.prof = L"Miner";
-        add_edge(BELONG, (void*)(&go.belong), gnome, mine[0]);
+        add_edge(BELONG, (void*)(&go.belong), gnome, mine[i]);
+    }
     }
 
-    for (int i = 0; i < dragon_count; ++i)
+    for (int i = 0; i < 1000; ++i)
+    {
+    for (int j = 0; j < 200; ++j)
     {
         //Dragon
-        go.dragon.values.id = i;
-        go.dragon.values.name = (L"Kondragon" + std::to_wstring(i));
+        go.dragon.values.id = i*200+(j+1);
+        go.dragon.values.name = (L"Kondragon" + std::to_wstring(i*200+j+1));
         go.dragon.values.age = 2003;
         go.dragon.values.color = 2003;
         go.dragon.values.size = 2003;
@@ -486,7 +491,8 @@ void DataManager::garbage_generate(GraphObjects &go) const
         oid_t dragon = add_node(DRAGON, (void*)(&go.dragon));
         //Belong
         go.belong.values.prof = L"Dragon";
-        add_edge(BELONG, (void*)(&go.belong), dragon, mine[0]);
+        add_edge(BELONG, (void*)(&go.belong), dragon, mine[i]);
+    }
     }
 
     for (int i = 0; i < ore_count; ++i)
@@ -494,9 +500,12 @@ void DataManager::garbage_generate(GraphObjects &go) const
         //Ore
         go.ore.values.id = i;
         go.ore.values.name = L"Gira0";
-        oid_t ore = add_node(ORE, (void*)(&go.ore)); 
-        //Mines
-        add_edge(MINES, (void*)(&go.mines), mine[0], ore);
+        ore[i] = add_node(ORE, (void*)(&go.ore)); 
+    }
+
+    for (int i = 0; i < 1000; ++i)
+    { 
+        add_edge(MINES, (void*)(&go.mines), mine[i], ore[0]);
     }
 }
 

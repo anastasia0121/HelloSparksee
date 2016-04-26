@@ -22,6 +22,14 @@ using namespace sparksee::io;
 class DataManager
 {
 public:
+    Session & get_session() const
+    {
+        return *sess;
+    }
+    Graph & get_graph() const
+    {
+        return *g;
+    }
     // Export to graphviz
     void export_to_graphviz() const;
 

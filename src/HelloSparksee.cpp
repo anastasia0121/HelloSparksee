@@ -17,13 +17,14 @@
 using namespace sparksee::gdb;
 using namespace sparksee::io;
 
-#define GARBAGE 1
+#define GARBAGE 0
 #define EXPORT 0
-#define IMPORT 0
+#define IMPORT 0 
 
 #define TASK1 0
 #define TASK2 0
 #define TASK3 1
+#define TASK3M 0 
 
 int main(int argc, char *argv[]) 
 {
@@ -36,7 +37,9 @@ int main(int argc, char *argv[])
         dtm->create_objects(go);
 
 #if GARBAGE
+        dtm->get_session().Begin();
         dtm->garbage_generate(go);
+        dtm->get_session().Commit();
 #endif
 #if EXPORT
         dtm->export_all();
@@ -58,7 +61,7 @@ int main(int argc, char *argv[])
 #endif
 #if TASK3
         Value v;
-        oid_t node = dtm->search(go.mine.types.name, v.SetString(L"Arhopolis"));
+        oid_t node = dtm->search(go.mine.types.name, v.SetString(L"Arhopolis1"));
         
         uint64_t rate = timer::init_rate();
         uint64_t t1 = timer::rdtsc();
@@ -69,9 +72,36 @@ int main(int argc, char *argv[])
 
         dtm->dfs(node, L"Ore" , 30); 
 #endif
+#if TASK3M
+        Value v;
+        Value old_v, new_v;
+        dtm->get_session().Begin();
+        uint64_t rate = timer::init_rate();
+        uint64_t t1 = timer::rdtsc();
+        //1
+        //dtm->regexp_search(go.gnome.types.name, v.SetString(L"Un"));
+        //2
+        //oid_t node = dtm->search(go.mine.types.name, v.SetString(L"Arhopolis1"));
+        //Objects * objs = dtm->get_graph().Neighbors(node, go.belong.types.type, Any); 
+        //3
+        //dtm->remove_node(GNOME, go.gnome.types.name, old_v.SetString(L"Untilopulus1"));
+        //4
+        //dtm->change_node(go.gnome.types.name, 
+        //        old_v.SetString(L"Untilopulus2"), new_v.SetString(L"NewName"));
+        //5
+        //dtm->change_node(go.gnome.types.name, 
+        //        old_v.SetString(L"Unt"), new_v.SetString(L"NewName"));
+        uint64_t t2 = timer::rdtsc();
+
+        //delete it;
+        //delete objs;
+        dtm->get_session().Commit();
+
+        std::wcout << timer::to_msec(t2 - t1, rate) << std::endl;
+#endif
 
         // Export to graphviz
-        dtm->export_to_graphviz(); 
+        // dtm->export_to_graphviz(); 
     }
     catch (Exception& e)
     {
