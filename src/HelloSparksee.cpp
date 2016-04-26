@@ -17,13 +17,14 @@
 using namespace sparksee::gdb;
 using namespace sparksee::io;
 
-#define GARBAGE 0
+#define GARBAGE 1
 #define EXPORT 0
-#define IMPORT 1 
+#define IMPORT 0 
 
 #define TASK1 0
 #define TASK2 0
-#define TASK3 1
+#define TASK3 0 
+#define TASK3M 1
 
 int main(int argc, char *argv[]) 
 {
