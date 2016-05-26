@@ -35,7 +35,7 @@ cluster_tests:
 	g++ -I$(HEADER) -I./src -L$(LIB) $(CHNODESRC) $(FORCLUSTERSRC) -o NodesChanges -std=c++11 -lsparksee -lpthread
 
 perf:
-	g++ test/perf/*.cpp -std=c++11 -o Perf
+	g++ -march=native -O3 test/perf/*.cpp -std=c++11 -o Perf
 
 clean:
 	rm -rf *.gdb *.log *.o
