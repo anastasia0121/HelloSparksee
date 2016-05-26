@@ -17,8 +17,8 @@
 using namespace sparksee::gdb;
 using namespace sparksee::io;
 
-#define GARBAGE 1
-#define EXPORT 0
+#define GARBAGE 0
+#define EXPORT 1
 #define IMPORT 0 
 
 #define TASK1 0
@@ -79,6 +79,7 @@ int main(int argc, char *argv[])
         dtm->get_session().Begin();
         uint64_t rate = timer::init_rate();
         uint64_t t1 = timer::rdtsc();
+        dtm->search(go.gnome.types.name, v.SetString(L"Untilopulus1"));
         //1
         //dtm->regexp_search(go.gnome.types.name, v.SetString(L"Un"));
         //2
